@@ -405,6 +405,8 @@
     caption.href = info.source;
     caption.title = info.credit;
     hero.dataset.image = String(current.index);
+    hero.style.setProperty('--photo-ratio', `${current.img.naturalWidth} / ${current.img.naturalHeight}`);
+    requestAnimationFrame(layout);
   }
 
   async function preload() {
@@ -425,7 +427,8 @@
   }
 
   function layout() {
-    const w = hero.clientWidth, h = hero.clientHeight;
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    if (!w || !h) return;
     const s = Math.min(devicePixelRatio || 1, 1.5);
     if (W === w && H === h && scale === s) return;
     W = w; H = h; scale = s;
@@ -582,7 +585,9 @@
     }
   });
   motion.addEventListener('change', () => { updateTiles(0); render(); kick(); });
-  new ResizeObserver(layout).observe(hero);
+  const resize = new ResizeObserver(layout);
+  resize.observe(hero);
+  resize.observe(canvas);
   new IntersectionObserver(entries => { visible = entries[0].isIntersecting; if (visible) { lastTime = 0; kick(); } }).observe(hero);
   document.addEventListener('visibilitychange', () => { lastTime = 0; if (!document.hidden) kick(); });
 

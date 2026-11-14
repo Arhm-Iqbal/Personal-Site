@@ -61,6 +61,11 @@ ul { padding: 0; list-style: none; }
 .fullscreen-button:hover { color: rgb(255 255 255 / .88); background: rgb(255 255 255 / .06); }
 .fullscreen-button svg { display: block; width: 19px; height: 19px; }
 .sky:fullscreen { width: 100vw; height: 100svh; min-height: 100svh; }
+.sky.is-fullscreen {
+  position: fixed; z-index: 100; inset: 0; width: 100vw; height: 100vh; height: 100dvh;
+  min-height: 0; padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom);
+}
+html.fullscreen-page-open, body.fullscreen-page-open { overflow: hidden; }
 h1, #content h2 {
   color: #fff; font-family: Arial, Helvetica, sans-serif;
   font-size: clamp(1.5rem, 2.2vw, 2rem); font-weight: 600;
@@ -105,7 +110,13 @@ main { max-width: 1120px; padding: 0 var(--gutter) 88px; margin: 0 auto; }
 .credits-list li { padding: 20px 0; border-bottom: 1px solid var(--line); }
 .credits-list p { color: var(--ink-dim); font-size: .8125rem; margin-top: 6px; }
 @media (max-width: 700px) {
-  .sky { height: clamp(540px, 68svh, 620px); min-height: 0; }
+  .sky { height: 100svh; min-height: 0; }
+  .sky { background-image: none; }
+  #field {
+    inset: 0; width: 100%; height: auto; max-width: 100%; max-height: 100%;
+    aspect-ratio: var(--photo-ratio, 1 / 1); margin: auto;
+  }
+  .sky.is-fullscreen { height: 100vh; height: 100dvh; }
   .mast { padding-top: max(32px, env(safe-area-inset-top)); }
   .fullscreen-button { top: max(24px, env(safe-area-inset-top)); right: max(var(--gutter), env(safe-area-inset-right)); }
   .sky-tools { bottom: 96px; max-width: calc(100% - var(--gutter) * 2); gap: 8px; }
