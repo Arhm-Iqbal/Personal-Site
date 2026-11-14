@@ -100,24 +100,15 @@
     const info = images[index];
     const { layer, g } = makeLayer();
     const { layer: photo, g: pg } = makeLayer();
-    let sx, sy, sw, sh, backdrop = null;
+    let sx, sy, sw, sh;
     if (matchMedia('(max-width: 700px)').matches) {
-      // Keep the complete image visible; extend its colors to the screen edges.
+      // Keep the complete image visible in its original proportions.
       const fit = Math.min(W / img.naturalWidth, H / img.naturalHeight);
       const dw = img.naturalWidth * fit, dh = img.naturalHeight * fit;
       const dx = (W - dw) / 2, dy = (H - dh) / 2;
       sx = -dx / fit; sy = -dy / fit; sw = W / fit; sh = H / fit;
       pg.fillStyle = GROUND; pg.fillRect(0, 0, W, H);
       pg.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight, dx, dy, dw, dh);
-
-      const back = makeLayer();
-      backdrop = back.layer;
-      const cover = Math.max(W / img.naturalWidth, H / img.naturalHeight);
-      const bw = img.naturalWidth * cover * 1.08, bh = img.naturalHeight * cover * 1.08;
-      back.g.filter = 'blur(18px) brightness(.42)';
-      back.g.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight,
-        (W - bw) / 2, (H - bh) / 2, bw, bh);
-      back.g.filter = 'none';
     } else {
       const ratio = Math.max(W / img.naturalWidth, H / img.naturalHeight);
       sw = W / ratio; sh = H / ratio;
@@ -135,9 +126,9 @@
     try { data = sg.getImageData(0, 0, sample.width, sample.height).data; }
     catch (_) { // Direct file:// previews may disallow pixel reads.
       g.globalAlpha = .65; g.drawImage(photo, 0, 0, W, H);
-      return { index, img, layer, photo, backdrop, data: null };
+      return { index, img, layer, photo, data: null };
     }
-    const scene = { index, img, layer, photo, backdrop, g, data, cols, rows,
+    const scene = { index, img, layer, photo, g, data, cols, rows,
       sampleW: sample.width, sampleH: sample.height, paintedAt: -Infinity };
     // Is there light in this cell? Judged by the brightest thing inside it, not
     // its average: a small galaxy or a thin filament fills only part of a cell
@@ -382,7 +373,6 @@
 
     g.globalCompositeOperation = 'source-over';
     g.globalAlpha = 1; g.fillStyle = GROUND; g.fillRect(0, 0, W, H);
-    if (scene.backdrop) g.drawImage(scene.backdrop, 0, 0, W, H);
     if (UNDER) { g.globalAlpha = UNDER; g.drawImage(scene.photo, 0, 0, W, H); }
     if (BLOOM) { g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high'; g.globalAlpha = BLOOM; g.drawImage(scene.bloom, 0, 0, W, H); }
     g.globalAlpha = 1;
