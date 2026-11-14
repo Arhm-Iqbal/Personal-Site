@@ -105,6 +105,13 @@ main { max-width: 1120px; padding: 0 var(--gutter) 88px; margin: 0 auto; }
 .rows p { margin-top: 7px; color: var(--ink-dim); max-width: 72ch; text-wrap: pretty; }
 .rows > li:target p { color: var(--ink); }
 .plain { max-width: 72ch; padding-top: 20px; color: var(--ink-dim); }
+.shelf { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 36px 28px; padding-top: 28px; }
+.shelf img {
+  display: block; width: 100%; height: auto; aspect-ratio: 2 / 3; object-fit: cover;
+  border-radius: 2px; background: #11141a; box-shadow: 0 0 0 1px rgb(255 255 255 / .06), 0 12px 28px -14px rgb(0 0 0 / .9);
+}
+.shelf h4 { margin-top: 14px; font-size: .875rem; font-weight: 600; line-height: 1.4; letter-spacing: -.015em; text-wrap: balance; }
+.shelf p { margin-top: 4px; color: var(--ink-dim); font-size: .75rem; line-height: 1.45; }
 .certs { max-width: 72ch; padding-top: 16px; color: var(--ink-dim); }
 .certs li { padding: 4px 0; }
 .reach { display: flex; flex-wrap: wrap; gap: 12px 36px; padding-top: 28px; font-size: clamp(1.25rem, 2.5vw, 1.75rem); font-weight: 500; line-height: 1.5; letter-spacing: -.025em; }
@@ -172,6 +179,7 @@ html.home body { height: 100%; overflow: hidden; overscroll-behavior: none; }
   .mobile-panel-nav a { font-size: .75rem; }
   .rows > li, #resume .rows > li { grid-template-columns: minmax(0, 1fr); gap: 4px; }
   .group { margin-top: 40px; }
+  .shelf { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 18px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

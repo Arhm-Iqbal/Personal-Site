@@ -41,7 +41,7 @@
   let tiles = [], tileCols = 0, tileRows = 0, clicks = 0;
   // Section pages lie behind the artwork: 1 while every tile is turned to show
   // the page, 0 for the artwork. pageDone settles the flip in progress.
-  let pageTarget = 0, pageDone = null;
+  let pageTarget = 0, pageDone = null, pageEarly = false;
   let tileW = 72, tileH = 56;
   let visible = true, raf = 0, lastTime = 0, time = 0, renderedAt = -Infinity;
   const TICK = 1 / 32; // character layers update at about 30 Hz
@@ -487,7 +487,7 @@
     for (let r = 0; r < tileRows; r++) for (let c = 0; c < tileCols; c++) {
       const old = previous[Math.floor(r / tileRows * previousRows) * previousCols + Math.floor(c / tileCols * previousCols)];
       tiles.push({ c, r, turned: old?.turned || false, peek: false, a: old?.a || 0, velocity: 0, wait: 0,
-        page: old ? old.page : pageTarget, pageSpeed: 0, pageWait: 0 });
+        page: old ? old.page : pageTarget, pageSpeed: 0, pageWait: 0, pageHold: pageTarget });
     }
     render(); kick();
   }
@@ -526,32 +526,38 @@
   }
 
   function updatePage(dt) {
-    let moving = false;
+    let moving = false, turned = true;
     for (const t of tiles) {
       if (motion.matches) {
         t.page = pageTarget; t.pageSpeed = 0; t.pageWait = 0;
       } else if (t.pageWait > 0) {
+        // Until its moment comes, a tile finishes whatever turn it was making.
         t.pageWait -= dt; moving = true;
+        settle(t, 'page', 'pageSpeed', t.pageHold, dt);
       } else if (Math.abs(t.page - pageTarget) > .001 || Math.abs(t.pageSpeed) > .01) {
         settle(t, 'page', 'pageSpeed', pageTarget, dt); moving = true;
       } else { t.page = pageTarget; t.pageSpeed = 0; }
+      if (t.pageWait > 0 || (t.page >= .5) !== (pageTarget === 1)) turned = false;
     }
-    if (!moving && pageDone) { const done = pageDone; pageDone = null; done(); }
+    if (pageDone && (!moving || (pageEarly && turned))) { const done = pageDone; pageDone = null; done(); }
     return moving;
   }
 
   // Turns every tile, each at its own moment, to show the section page behind
-  // the artwork (show) or to bring the artwork back. Resolves once all have turned.
-  function flipPage(show) {
+  // the artwork (show) or to bring the artwork back. Resolves once all have
+  // settled, or with early as soon as every tile is past its midpoint.
+  function flipPage(show, spread = .7, early = false) {
+    const hold = pageTarget;
     pageTarget = show ? 1 : 0;
     if (!current) {
       for (const t of tiles) t.page = pageTarget;
       return Promise.resolve();
     }
-    for (const t of tiles) { t.pageWait = Math.random() * .7; t.pageSpeed = 0; }
+    for (const t of tiles) { t.pageWait = Math.random() * spread; t.pageHold = hold; }
     return new Promise(resolve => {
       pageDone?.();
       pageDone = resolve;
+      pageEarly = early;
       lastTime = 0; kick();
     });
   }
