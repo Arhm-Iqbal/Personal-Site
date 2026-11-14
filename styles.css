@@ -118,6 +118,33 @@ main { max-width: 1120px; padding: 0 var(--gutter) 88px; margin: 0 auto; }
   .sky-tools { bottom: 96px; max-width: calc(100% - var(--gutter) * 2); gap: 8px; }
   .caption { font-size: .625rem; }
   .links { left: var(--gutter); right: var(--gutter); bottom: 25px; justify-content: space-between; gap: 12px; }
+  #content { display: none; }
+  #content.mobile-panel-open {
+    position: fixed; z-index: 200; inset: 0; display: block; width: 100%; max-width: none;
+    height: 100vh; height: 100dvh; overflow-y: auto; overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch; padding: 0 var(--gutter) 52px; margin: 0;
+    background: var(--ground); scroll-behavior: auto;
+  }
+  html.mobile-panel-open, body.mobile-panel-open { height: 100%; overflow: hidden; }
+  .mobile-panel-head {
+    position: sticky; z-index: 5; top: 0; display: block; margin: 0 calc(-1 * var(--gutter));
+    padding: max(12px, env(safe-area-inset-top)) var(--gutter) 12px;
+    border-bottom: 1px solid var(--line); background: rgb(7 9 13 / .96);
+    -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  }
+  .mobile-back {
+    min-height: 40px; padding: 0; border: 0; background: transparent; color: var(--ink-dim);
+    font: 500 .875rem "Inter", sans-serif; cursor: pointer;
+  }
+  .mobile-back span { margin-left: 5px; color: var(--ink); }
+  .mobile-panel-nav { display: flex; justify-content: space-between; gap: 10px; padding-top: 8px; }
+  .mobile-panel-nav a { padding: 5px 0; color: var(--ink-dim); font-size: .75rem; text-decoration: none; }
+  .mobile-panel-nav a[aria-current="page"] { color: var(--ink); }
+  #content.mobile-panel-open > :not(.mobile-panel-head):not(.mobile-active) { display: none; }
+  #content.mobile-panel-open .block { padding-top: 32px; }
+  #content.mobile-panel-open .intro { padding-top: 34px; }
+  #content.mobile-panel-open .group { margin-top: 30px; }
+  #content.mobile-panel-open .rows > li { padding: 18px 0; }
   .rows > li { grid-template-columns: minmax(0, 1fr); gap: 7px; padding: 24px 0; }
   .group { margin-top: 40px; }
 }
