@@ -110,6 +110,11 @@ main { max-width: 1120px; padding: 0 var(--gutter) 88px; margin: 0 auto; }
   display: block; width: 100%; height: auto; aspect-ratio: 2 / 3; object-fit: cover;
   border-radius: 2px; background: #11141a; box-shadow: 0 0 0 1px rgb(255 255 255 / .06), 0 12px 28px -14px rgb(0 0 0 / .9);
 }
+.shelf .nocover {
+  display: grid; place-items: center; width: 100%; aspect-ratio: 2 / 3; border-radius: 2px; background: #11141a;
+  box-shadow: 0 0 0 1px rgb(255 255 255 / .06), 0 12px 28px -14px rgb(0 0 0 / .9);
+  color: var(--ink-dim); font-size: .75rem; font-weight: 600; letter-spacing: .08em;
+}
 .shelf h4 { margin-top: 14px; font-size: .875rem; font-weight: 600; line-height: 1.4; letter-spacing: -.015em; text-wrap: balance; }
 .shelf p { margin-top: 4px; color: var(--ink-dim); font-size: .75rem; line-height: 1.45; }
 .certs { max-width: 72ch; padding-top: 16px; color: var(--ink-dim); }
