@@ -40,7 +40,8 @@
   let current = null, upcoming = null;
   let tiles = [], tileCols = 0, tileRows = 0, clicks = 0;
   let tileW = 72, tileH = 56;
-  let visible = true, raf = 0, lastTime = 0, time = 0;
+  let visible = true, raf = 0, lastTime = 0, time = 0, renderedAt = -Infinity;
+  const TICK = 1 / 32; // character layers update at about 30 Hz
   let bag = [], failed = new Set(), glyphs = [];
   const cache = new Map();
 
@@ -276,7 +277,7 @@
 
   function paintScene(scene) {
     // Cache only between animation ticks, never the actual character pattern.
-    if (!scene.data || time - scene.paintedAt < 1 / 30) return;
+    if (!scene.data || time - scene.paintedAt < TICK) return;
     const elapsed = clamp(time - scene.paintedAt, 0, .05);
     scene.paintedAt = time;
     const field = scene.motion;
@@ -426,7 +427,7 @@
 
   function layout() {
     const w = hero.clientWidth, h = hero.clientHeight;
-    const s = Math.min(devicePixelRatio || 1, w <= 700 ? 2 : 1.5);
+    const s = Math.min(devicePixelRatio || 1, 1.5);
     if (W === w && H === h && scale === s) return;
     W = w; H = h; scale = s;
     canvas.width = Math.round(W * scale); canvas.height = Math.round(H * scale);
@@ -539,7 +540,9 @@
     lastTime = ms;
     if (!motion.matches) time += dt;
     const moving = updateTiles(dt);
-    render();
+    // Between character ticks the picture is unchanged, so on 120 Hz screens
+    // only tile flips are drawn at display rate.
+    if (moving || motion.matches || time - renderedAt >= TICK) { render(); renderedAt = time; }
     if (moving || (!motion.matches)) kick();
   }
 
