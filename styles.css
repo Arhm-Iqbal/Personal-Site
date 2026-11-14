@@ -144,28 +144,8 @@ html.home body { height: 100%; overflow: hidden; overscroll-behavior: none; }
 #content.page-open h2 { padding-bottom: 12px; }
 #content.page-open .rows > li { padding: 12px 0; }
 #content.page-open .rows p { margin-top: 4px; line-height: 1.5; }
-.resume-category-page { display: none; }
-.resume-category-active { display: block; }
-.resume-picker { display: flex; align-items: center; gap: 12px; padding-top: 16px; color: var(--ink-dim); font-size: .75rem; }
-.resume-picker select {
-  min-height: 40px; min-width: 190px; padding: 0 34px 0 12px; border: 1px solid var(--line);
-  border-radius: 4px; background: #0b0e13; color: var(--ink); font: inherit;
-}
-#resume .resume-category-page { padding-top: 2px; }
-#resume .group { margin-top: 18px; padding-bottom: 8px; }
 #resume .rows > li { grid-template-columns: 132px minmax(0, 1fr); gap: 6px 24px; }
 #resume .plain, #resume .certs { padding-top: 10px; }
-#work.page-active { display: flex; flex-direction: column; }
-#work .rows > li:not(.work-item-active) { display: none; }
-#work .rows > li.work-item-active { display: block; width: 100%; max-width: 900px; margin: 6vh auto 0; padding: 28px 0; }
-.work-pager {
-  display: flex; align-items: center; justify-content: center; gap: 24px; margin-top: auto;
-  padding: 24px 0 16px; color: var(--ink-dim); font: .75rem var(--mono);
-}
-.work-pager button {
-  display: grid; place-items: center; width: 42px; height: 42px; border: 1px solid var(--line);
-  border-radius: 50%; background: transparent; color: var(--ink); font-size: 1.1rem; cursor: pointer;
-}
 @media (max-width: 700px) {
   html.home { --page-x: var(--gutter); }
   .sky::after {
@@ -184,7 +164,6 @@ html.home body { height: 100%; overflow: hidden; overscroll-behavior: none; }
   #content.page-open .mobile-panel-head { min-height: 0; padding-top: max(12px, env(safe-area-inset-top)); padding-bottom: 8px; }
   .mobile-panel-nav { gap: 16px; }
   .mobile-panel-nav a { font-size: .75rem; }
-  #work .rows > li.work-item-active { margin-top: 3vh; padding: 20px 0; }
   .rows > li, #resume .rows > li { grid-template-columns: minmax(0, 1fr); gap: 4px; }
   .group { margin-top: 40px; }
 }

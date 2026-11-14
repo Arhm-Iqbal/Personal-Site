@@ -41,7 +41,7 @@
   let tiles = [], tileCols = 0, tileRows = 0, clicks = 0;
   // Section pages lie behind the artwork: 1 while every tile is turned to show
   // the page, 0 for the artwork. pageDone settles the flip in progress.
-  let pageTarget = 0, pageDone = null, pageFlips = 0;
+  let pageTarget = 0, pageDone = null;
   let tileW = 72, tileH = 56;
   let visible = true, raf = 0, lastTime = 0, time = 0, renderedAt = -Infinity;
   const TICK = 1 / 32; // character layers update at about 30 Hz
@@ -544,12 +544,11 @@
   // the artwork (show) or to bring the artwork back. Resolves once all have turned.
   function flipPage(show) {
     pageTarget = show ? 1 : 0;
-    pageFlips++;
     if (!current) {
       for (const t of tiles) t.page = pageTarget;
       return Promise.resolve();
     }
-    for (const t of tiles) { t.pageWait = hash(t.c * 73 + t.r * 151 + pageFlips * 977) * .6; t.pageSpeed = 0; }
+    for (const t of tiles) { t.pageWait = Math.random() * .7; t.pageSpeed = 0; }
     return new Promise(resolve => {
       pageDone?.();
       pageDone = resolve;
