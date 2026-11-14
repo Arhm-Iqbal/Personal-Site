@@ -100,21 +100,10 @@
     const info = images[index];
     const { layer, g } = makeLayer();
     const { layer: photo, g: pg } = makeLayer();
-    let sx, sy, sw, sh;
-    if (matchMedia('(max-width: 700px)').matches) {
-      // Keep the complete image visible in its original proportions.
-      const fit = Math.min(W / img.naturalWidth, H / img.naturalHeight);
-      const dw = img.naturalWidth * fit, dh = img.naturalHeight * fit;
-      const dx = (W - dw) / 2, dy = (H - dh) / 2;
-      sx = -dx / fit; sy = -dy / fit; sw = W / fit; sh = H / fit;
-      pg.fillStyle = GROUND; pg.fillRect(0, 0, W, H);
-      pg.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight, dx, dy, dw, dh);
-    } else {
-      const ratio = Math.max(W / img.naturalWidth, H / img.naturalHeight);
-      sw = W / ratio; sh = H / ratio;
-      sx = (img.naturalWidth - sw) * info.fx; sy = (img.naturalHeight - sh) * info.fy;
-      pg.drawImage(img, sx, sy, sw, sh, 0, 0, W, H);
-    }
+    const ratio = Math.max(W / img.naturalWidth, H / img.naturalHeight);
+    const sw = W / ratio, sh = H / ratio;
+    const sx = (img.naturalWidth - sw) * info.fx, sy = (img.naturalHeight - sh) * info.fy;
+    pg.drawImage(img, sx, sy, sw, sh, 0, 0, W, H);
     g.fillStyle = GROUND; g.fillRect(0, 0, W, H);
     g.globalAlpha = .3; g.drawImage(photo, 0, 0, W, H); g.globalAlpha = 1;
     const cols = Math.ceil(W / cellW), rows = Math.ceil(H / cellH);
@@ -437,7 +426,7 @@
 
   function layout() {
     const w = hero.clientWidth, h = hero.clientHeight;
-    const s = Math.min(devicePixelRatio || 1, 1.5);
+    const s = Math.min(devicePixelRatio || 1, w <= 700 ? 2 : 1.5);
     if (W === w && H === h && scale === s) return;
     W = w; H = h; scale = s;
     canvas.width = Math.round(W * scale); canvas.height = Math.round(H * scale);

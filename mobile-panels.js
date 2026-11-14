@@ -4,7 +4,6 @@
   if (!content || !back) return;
 
   let trigger = null;
-  const narrow = matchMedia('(max-width: 700px)');
   const panelIds = new Set(['work', 'resume', 'books', 'contact']);
 
   // Work is presented as one focused project at a time on the fixed-screen layout.
@@ -72,12 +71,9 @@
     content.querySelectorAll('.page-active').forEach(node => node.classList.remove('page-active'));
     panel.classList.add('page-active');
     content.classList.add('page-open');
-    content.classList.toggle('mobile-panel-open', narrow.matches);
     content.setAttribute('aria-hidden', 'false');
-    document.documentElement.classList.add('page-open');
-    document.body.classList.add('page-open');
     if (id === 'work') showWork(workIndex);
-    content.scrollTop = 0;
+    panel.scrollTop = 0;
 
     document.querySelectorAll('.mobile-panel-nav a').forEach(link => {
       if (link.hash === `#${id}`) link.setAttribute('aria-current', 'page');
@@ -88,11 +84,9 @@
   }
 
   function closePanel() {
-    content.classList.remove('page-open', 'mobile-panel-open');
+    content.classList.remove('page-open');
     content.querySelectorAll('.page-active').forEach(node => node.classList.remove('page-active'));
     content.setAttribute('aria-hidden', 'true');
-    document.documentElement.classList.remove('page-open');
-    document.body.classList.remove('page-open');
     trigger?.focus({ preventScroll: true });
     trigger = null;
   }
@@ -114,9 +108,5 @@
   back.addEventListener('click', closePanel);
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && content.classList.contains('page-open')) closePanel();
-  });
-  narrow.addEventListener('change', event => {
-    if (!content.classList.contains('page-open')) return;
-    content.classList.toggle('mobile-panel-open', event.matches);
   });
 })();
