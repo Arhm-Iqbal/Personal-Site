@@ -117,6 +117,8 @@ main { max-width: 1120px; padding: 0 var(--gutter) 88px; margin: 0 auto; }
 }
 .shelf h4 { margin-top: 14px; font-size: .875rem; font-weight: 600; line-height: 1.4; letter-spacing: -.015em; text-wrap: balance; }
 .shelf p { margin-top: 4px; color: var(--ink-dim); font-size: .75rem; line-height: 1.45; }
+.reach a { display: inline-flex; align-items: center; gap: .4em; }
+.reach svg { width: .85em; height: .85em; fill: currentColor; flex: none; }
 .certs { max-width: 72ch; padding-top: 16px; color: var(--ink-dim); }
 .certs li { padding: 4px 0; }
 .reach { display: flex; flex-wrap: wrap; gap: 12px 36px; padding-top: 28px; font-size: clamp(1.25rem, 2.5vw, 1.75rem); font-weight: 500; line-height: 1.5; letter-spacing: -.025em; }
