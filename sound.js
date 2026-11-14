@@ -2,7 +2,7 @@
   const button = document.getElementById('sound-toggle');
   if (!button) return;
 
-  const SRC = 'audio/theme.mp3';
+  const SRC = 'audio/theme.m4a';
   const KEY = 'sound-muted';
   const VOLUME = .55;
   const audio = new Audio();
