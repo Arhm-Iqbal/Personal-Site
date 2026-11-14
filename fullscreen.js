@@ -1,51 +1,44 @@
 (() => {
+  const root = document.documentElement;
   const hero = document.querySelector('.sky');
   const button = document.getElementById('fullscreen-toggle');
   if (!hero || !button) return;
 
-  const usePageFullscreen = /iPhone|iPod/.test(navigator.userAgent);
+  // The whole page goes fullscreen, so the section pages still open over the
+  // artwork. iPhone Safari cannot fullscreen a page; there the button hides the
+  // interface instead and leaves only the artwork.
+  const canFullscreen = Boolean(document.fullscreenEnabled || document.webkitFullscreenEnabled);
+  const fullscreenElement = () => document.fullscreenElement || document.webkitFullscreenElement;
 
   function sync() {
-    const active = hero.classList.contains('is-fullscreen') || document.fullscreenElement === hero;
+    const active = Boolean(fullscreenElement()) || hero.classList.contains('is-immersive');
     button.setAttribute('aria-pressed', String(active));
     button.setAttribute('aria-label', active ? 'Exit fullscreen' : 'View space artwork fullscreen');
     button.title = active ? 'Exit fullscreen' : 'View fullscreen';
   }
 
-  function enterPageFullscreen() {
-    hero.classList.add('is-fullscreen');
-    document.documentElement.classList.add('fullscreen-page-open');
-    document.body.classList.add('fullscreen-page-open');
-    sync();
-  }
-
-  function exitPageFullscreen() {
-    hero.classList.remove('is-fullscreen');
-    document.documentElement.classList.remove('fullscreen-page-open');
-    document.body.classList.remove('fullscreen-page-open');
+  function setImmersive(on) {
+    hero.classList.toggle('is-immersive', on);
     sync();
   }
 
   button.addEventListener('click', async () => {
-    if (hero.classList.contains('is-fullscreen') || document.fullscreenElement === hero) {
-      if (document.fullscreenElement === hero) {
-        try { await document.exitFullscreen(); } catch (_) { exitPageFullscreen(); }
-      } else exitPageFullscreen();
-      return;
+    if (fullscreenElement()) {
+      try { await (document.exitFullscreen || document.webkitExitFullscreen).call(document); } catch (_) {}
+    } else if (hero.classList.contains('is-immersive')) {
+      setImmersive(false);
+    } else if (canFullscreen) {
+      try { await (root.requestFullscreen || root.webkitRequestFullscreen).call(root); }
+      catch (_) { setImmersive(true); }
+    } else {
+      setImmersive(true);
     }
-
-    // iPhone Safari does not provide reliable fullscreen for arbitrary elements.
-    if (usePageFullscreen || !hero.requestFullscreen) {
-      enterPageFullscreen();
-      return;
-    }
-    try { await hero.requestFullscreen(); }
-    catch (_) { enterPageFullscreen(); }
     sync();
   });
 
   document.addEventListener('fullscreenchange', sync);
+  document.addEventListener('webkitfullscreenchange', sync);
   document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && hero.classList.contains('is-fullscreen')) exitPageFullscreen();
+    if (event.key === 'Escape' && hero.classList.contains('is-immersive')) setImmersive(false);
   });
 })();
