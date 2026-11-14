@@ -52,18 +52,23 @@ ul { padding: 0; list-style: none; }
 }
 #field { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: pan-y; cursor: crosshair; }
 .mast { position: relative; z-index: 1; padding: clamp(28px, 4vw, 56px) var(--gutter) 0; pointer-events: none; }
-.fullscreen-button {
+.fullscreen-button, .sound-button {
   position: absolute; z-index: 3; top: clamp(24px, 4vw, 52px); right: var(--gutter);
   display: grid; place-items: center; width: 40px; height: 40px; padding: 10px;
   border: 0; border-radius: 50%; background: transparent; color: rgb(255 255 255 / .42);
   cursor: pointer; transition: color 180ms, background 180ms;
 }
-.fullscreen-button:hover { color: rgb(255 255 255 / .88); background: rgb(255 255 255 / .06); }
-.fullscreen-button svg { display: block; width: 19px; height: 19px; }
-.mast, .sky-tools, .links, .fullscreen-button, .sky::after { transition: opacity 240ms, color 180ms, background 180ms; }
+.sound-button { right: calc(var(--gutter) + 40px); color: rgb(255 255 255 / .3); }
+.sound-button[hidden] { display: none; }
+.sound-button.is-playing { color: rgb(255 255 255 / .42); }
+.sound-button .sound-on, .sound-button.is-playing .sound-off { display: none; }
+.sound-button.is-playing .sound-on { display: inline; }
+.fullscreen-button:hover, .sound-button:hover { color: rgb(255 255 255 / .88); background: rgb(255 255 255 / .06); }
+.fullscreen-button svg, .sound-button svg { display: block; width: 19px; height: 19px; }
+.mast, .sky-tools, .links, .fullscreen-button, .sound-button, .sky::after { transition: opacity 240ms, color 180ms, background 180ms; }
 .sky.is-immersive .mast, .sky.is-immersive .sky-tools, .sky.is-immersive .links { opacity: 0; pointer-events: none; }
 html.page-shown .mast, html.page-shown .sky-tools, html.page-shown .links,
-html.page-shown .fullscreen-button, html.page-shown .sky::after { opacity: 0; pointer-events: none; }
+html.page-shown .fullscreen-button, html.page-shown .sound-button, html.page-shown .sky::after { opacity: 0; pointer-events: none; }
 html.page-flipping .sky { z-index: 300; background: none; }
 html.page-flipping #field { pointer-events: none; }
 h1, #content h2 {
@@ -158,6 +163,7 @@ html.home body { height: 100%; overflow: hidden; overscroll-behavior: none; }
   #field { touch-action: none; }
   .mast { padding-top: max(32px, env(safe-area-inset-top)); padding-left: max(var(--gutter), env(safe-area-inset-left)); }
   .fullscreen-button { display: none; }
+  .sound-button { top: max(28px, env(safe-area-inset-top)); right: max(calc(var(--gutter) - 10px), env(safe-area-inset-right)); }
   .sky-tools { bottom: calc(80px + env(safe-area-inset-bottom)); max-width: calc(100% - var(--gutter) * 2); gap: 8px; }
   .caption { font-size: .625rem; }
   .links { left: var(--gutter); right: var(--gutter); bottom: max(20px, env(safe-area-inset-bottom)); justify-content: space-between; gap: 12px; }

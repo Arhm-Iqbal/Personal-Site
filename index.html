@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2306080f'/%3E%3Crect x='8' y='14' width='3' height='12' fill='%23ff6b81'/%3E%3Crect x='15' y='6' width='3' height='20' fill='%23ff6b81'/%3E%3Crect x='22' y='11' width='3' height='15' fill='%23ff6b81'/%3E%3C/svg%3E">
 <link rel="preload" href="assets/fonts/ibm-plex-mono-400.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="styles.css?v=20261114-lists">
+<link rel="stylesheet" href="styles.css?v=20261114-sound">
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to content</a>
@@ -25,6 +25,13 @@
     </div>
   </div>
 
+  <button class="sound-button" id="sound-toggle" type="button" aria-label="Play music" title="Play music" aria-pressed="false" hidden>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M4 9.5v5h3.5L12 18V6L7.5 9.5H4z"/>
+      <path class="sound-on" d="M15.5 9.5a3.5 3.5 0 0 1 0 5M18 7a7 7 0 0 1 0 10"/>
+      <path class="sound-off" d="M16 10l4 4m0-4l-4 4"/>
+    </svg>
+  </button>
   <button class="fullscreen-button" id="fullscreen-toggle" type="button" aria-label="View space artwork fullscreen" title="View fullscreen" aria-pressed="false">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4"/>
@@ -228,6 +235,7 @@
 <script src="space-motion.js" defer></script>
 <script src="field.js?v=20261114-lists" defer></script>
 <script src="fullscreen.js" defer></script>
+<script src="sound.js" defer></script>
 <script src="mobile-panels.js?v=20261114-lists" defer></script>
 </body>
 </html>
