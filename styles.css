@@ -110,6 +110,7 @@ main { max-width: 1120px; padding: 0 var(--gutter) 88px; margin: 0 auto; }
 .credits-list li { padding: 20px 0; border-bottom: 1px solid var(--line); }
 .credits-list p { color: var(--ink-dim); font-size: .8125rem; margin-top: 6px; }
 @media (max-width: 700px) {
+  html, body { background-color: var(--ground); overscroll-behavior: none; }
   .sky { height: 100svh; min-height: 0; }
   #field { width: 100%; height: 100%; }
   .sky.is-fullscreen { height: 100vh; height: 100dvh; }
