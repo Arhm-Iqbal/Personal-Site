@@ -425,7 +425,7 @@
   }
 
   function layout() {
-    const w = canvas.clientWidth, h = canvas.clientHeight;
+    const w = hero.clientWidth, h = hero.clientHeight;
     const s = Math.min(devicePixelRatio || 1, w <= 700 ? 2 : 1.5);
     if (W === w && H === h && scale === s) return;
     W = w; H = h; scale = s;

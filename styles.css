@@ -163,15 +163,7 @@ html.home body { height: 100%; overflow: hidden; overscroll-behavior: none; }
   border-radius: 50%; background: transparent; color: var(--ink); font-size: 1.1rem; cursor: pointer;
 }
 @media (max-width: 700px) {
-  html.home { --page-x: var(--gutter); --bleed: 140px; }
-  /* Safari draws its status bar and floating toolbar over the page edges, so the
-     artwork runs past both edges to show through them instead of plain black. */
-  .home .sky { overflow: visible; }
-  .home #field, .home .sky::after { top: calc(-1 * var(--bleed)); bottom: auto; height: calc(100% + 2 * var(--bleed)); }
-  .home .sky::after {
-    background: linear-gradient(180deg, rgb(7 9 13 / .55) 0%, transparent calc(var(--bleed) + 120px),
-      transparent calc(100% - var(--bleed) - 200px), rgb(7 9 13 / .75) 100%);
-  }
+  html.home { --page-x: var(--gutter); }
   #field { touch-action: none; }
   .mast { padding-top: max(32px, env(safe-area-inset-top)); padding-left: max(var(--gutter), env(safe-area-inset-left)); }
   .fullscreen-button { top: max(24px, env(safe-area-inset-top)); right: max(var(--gutter), env(safe-area-inset-right)); }
