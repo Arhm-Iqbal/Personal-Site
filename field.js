@@ -9,7 +9,7 @@
   const hero = document.querySelector('.sky');
   const images = window.SPACE_IMAGES;
   if (!canvas || !images?.length) return;
-  const ctx = canvas.getContext('2d', { alpha: false });
+  const ctx = canvas.getContext('2d');
   if (!ctx) return;
   const caption = document.getElementById('caption');
   const announcement = document.getElementById('field-status');
@@ -39,6 +39,9 @@
   let W = 0, H = 0, scale = 1, fontSize = 12, cellW = 8, cellH = 13;
   let current = null, upcoming = null;
   let tiles = [], tileCols = 0, tileRows = 0, clicks = 0;
+  // Section pages lie behind the artwork: 1 while every tile is turned to show
+  // the page, 0 for the artwork. pageDone settles the flip in progress.
+  let pageTarget = 0, pageDone = null, pageFlips = 0;
   let tileW = 72, tileH = 56;
   let visible = true, raf = 0, lastTime = 0, time = 0, renderedAt = -Infinity;
   const TICK = 1 / 32; // character layers update at about 30 Hz
@@ -97,7 +100,29 @@
     return { layer, g };
   }
 
+  // Builds a scene in one go, for the first photograph and after a resize.
   function prepare(index, img) {
+    const steps = prepareSteps(index, img);
+    let step;
+    do step = steps.next(); while (!step.done);
+    return step.value;
+  }
+
+  // Builds a scene a few milliseconds at a time, so the artwork keeps moving
+  // while the next photograph is readied.
+  async function prepareGently(index, img) {
+    const steps = prepareSteps(index, img);
+    let step, slice = performance.now();
+    while (!(step = steps.next()).done) {
+      if (performance.now() - slice > 6) {
+        await new Promise(resolve => setTimeout(resolve));
+        slice = performance.now();
+      }
+    }
+    return step.value;
+  }
+
+  function* prepareSteps(index, img) {
     const info = images[index];
     const { layer, g } = makeLayer();
     const { layer: photo, g: pg } = makeLayer();
@@ -107,6 +132,7 @@
     pg.drawImage(img, sx, sy, sw, sh, 0, 0, W, H);
     g.fillStyle = GROUND; g.fillRect(0, 0, W, H);
     g.globalAlpha = .3; g.drawImage(photo, 0, 0, W, H); g.globalAlpha = 1;
+    yield;
     const cols = Math.ceil(W / cellW), rows = Math.ceil(H / cellH);
     const sample = document.createElement('canvas');
     sample.width = cols * 2; sample.height = rows * 2;
@@ -129,6 +155,7 @@
     fg.imageSmoothingQuality = 'high';
     fg.drawImage(photo, 0, 0, photo.width, photo.height, 0, 0, fine.width, fine.height);
     const fd = fg.getImageData(0, 0, fine.width, fine.height).data;
+    yield;
     scene.peak = new Float32Array(cols * rows);
     const brightest = new Uint8ClampedArray(cols * rows * 3); // colour of that brightest thing
     for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
@@ -171,14 +198,20 @@
     softG.imageSmoothingQuality = 'high';
     softG.drawImage(small, 0, 0, photo.width, photo.height);
     const around = softG.getImageData(0, 0, photo.width, photo.height).data;
-    for (let i = 0; i < pixels.data.length; i += 4) {
-      const l = (.2126 * pixels.data[i] + .7152 * pixels.data[i+1] + .0722 * pixels.data[i+2]) / 255;
-      const blurred = (.2126 * around[i] + .7152 * around[i+1] + .0722 * around[i+2]) / 255;
-      const bright = clamp((l - .6) / .35), fine = clamp((l - blurred - .045) / .15);
-      const k = Math.max(bright * bright * (3 - 2 * bright), fine * fine * (3 - 2 * fine));
-      pixels.data[i+3] = Math.round(255 * k);
+    yield;
+    const rowBytes = photo.width * 4;
+    for (let row = 0; row < pixels.data.length; row += rowBytes) {
+      for (let i = row; i < row + rowBytes; i += 4) {
+        const l = (.2126 * pixels.data[i] + .7152 * pixels.data[i+1] + .0722 * pixels.data[i+2]) / 255;
+        const blurred = (.2126 * around[i] + .7152 * around[i+1] + .0722 * around[i+2]) / 255;
+        const bright = clamp((l - .6) / .35), fine = clamp((l - blurred - .045) / .15);
+        const k = Math.max(bright * bright * (3 - 2 * bright), fine * fine * (3 - 2 * fine));
+        pixels.data[i+3] = Math.round(255 * k);
+      }
+      yield;
     }
     hg.putImageData(pixels, 0, 0);
+    yield;
     scene.highlights = highlights;
     scene.bloom = small;
     // A small brightness map of the whole photograph, uncropped. Scores that
@@ -191,10 +224,13 @@
     const wd = wg.getImageData(0, 0, whole.width, whole.height).data;
     const light = new Float32Array(whole.width * whole.height);
     for (let i = 0; i < light.length; i++) light[i] = (.2126 * wd[i*4] + .7152 * wd[i*4+1] + .0722 * wd[i*4+2]) / 255;
+    yield;
     scene.motion = window.SpaceMotion.compile(info,
       { sx, sy, sw, sh, iw: img.naturalWidth, ih: img.naturalHeight }, cols, rows, cellW, cellH, W, H,
       { light, w: whole.width, h: whole.height });
+    yield;
     scene.stars = findStars(scene);
+    yield;
     // Characters stand back from detected stars, so their real profiles stay clean.
     scene.guard = new Float32Array(cols * rows);
     for (const star of scene.stars) {
@@ -212,13 +248,18 @@
     const { layer: vivid, g: vg } = makeLayer();
     const lift = exposure(scene.floor, scene.ceil);
     const lit = pg.getImageData(0, 0, photo.width, photo.height), p = lit.data;
-    for (let i = 0; i < p.length; i += 4) {
-      const l = .2126 * p[i] + .7152 * p[i+1] + .0722 * p[i+2], gain = lift[l | 0];
-      p[i] = Math.max(0, Math.min(255, (l + (p[i] - l) * COLOUR) * gain));
-      p[i+1] = Math.max(0, Math.min(255, (l + (p[i+1] - l) * COLOUR) * gain));
-      p[i+2] = Math.max(0, Math.min(255, (l + (p[i+2] - l) * COLOUR) * gain));
+    yield;
+    for (let row = 0; row < p.length; row += rowBytes) {
+      for (let i = row; i < row + rowBytes; i += 4) {
+        const l = .2126 * p[i] + .7152 * p[i+1] + .0722 * p[i+2], gain = lift[l | 0];
+        p[i] = Math.max(0, Math.min(255, (l + (p[i] - l) * COLOUR) * gain));
+        p[i+1] = Math.max(0, Math.min(255, (l + (p[i+1] - l) * COLOUR) * gain));
+        p[i+2] = Math.max(0, Math.min(255, (l + (p[i+2] - l) * COLOUR) * gain));
+      }
+      yield;
     }
     vg.putImageData(lit, 0, 0);
+    yield;
     // A character's strokes mostly miss an object smaller than its cell, and
     // would show the dark around it. So each cell is also given the colour of
     // the brightest thing inside it, and whichever is lighter wins.
@@ -415,7 +456,10 @@
     while ((candidate = pick(current.index)) !== undefined) {
       try {
         const img = await load(candidate);
-        upcoming = prepare(candidate, img);
+        const size = `${canvas.width}x${canvas.height}`;
+        const scene = await prepareGently(candidate, img);
+        // A resize while it was being built leaves it the wrong size; rebuild it.
+        upcoming = size === `${canvas.width}x${canvas.height}` ? scene : prepare(candidate, img);
         canvas.setAttribute('aria-busy', 'false');
         kick();
         // Retain decoded data for only the current and upcoming photograph.
@@ -442,7 +486,8 @@
     tiles = [];
     for (let r = 0; r < tileRows; r++) for (let c = 0; c < tileCols; c++) {
       const old = previous[Math.floor(r / tileRows * previousRows) * previousCols + Math.floor(c / tileCols * previousCols)];
-      tiles.push({ c, r, turned: old?.turned || false, peek: false, a: old?.a || 0, velocity: 0, wait: 0 });
+      tiles.push({ c, r, turned: old?.turned || false, peek: false, a: old?.a || 0, velocity: 0, wait: 0,
+        page: old ? old.page : pageTarget, pageSpeed: 0, pageWait: 0 });
     }
     render(); kick();
   }
@@ -453,22 +498,65 @@
     if (!current) return;
     paintScene(current);
     ctx.drawImage(current.layer, 0, 0, W, H);
-    if (!upcoming) return;
-    if (tiles.some(t => t.a >= .5)) paintScene(upcoming);
+    if (upcoming && tiles.some(t => t.a >= .5)) paintScene(upcoming);
     for (const tile of tiles) {
-      if (tile.a < .001) continue;
+      const turning = upcoming && tile.a >= .001, paging = tile.page >= .001;
+      if (!turning && !paging) continue;
       const x = tile.c * tileW, y = tile.r * tileH;
       const w = Math.min(tileW, W - x), h = Math.min(tileH, H - y);
-      const width = Math.abs(Math.cos(tile.a * Math.PI));
-      const side = tile.a < .5 ? current : upcoming;
+      const width = Math.abs(Math.cos((paging ? tile.page : tile.a) * Math.PI));
+      const side = turning && tile.a >= .5 ? upcoming : current;
       // Composite the live field on each face, including already flipped tiles.
       ctx.fillStyle = GROUND; ctx.fillRect(x, y, w, h);
-      if (width > .004) {
-        ctx.drawImage(side.layer, x * scale, y * scale, w * scale, h * scale,
-          x + w * (1 - width) / 2, y, w * width, h);
-      }
+      if (width <= .004) continue;
+      // Past halfway a page tile's back face is a window onto the page beneath.
+      if (tile.page >= .5) ctx.clearRect(x + w * (1 - width) / 2, y, w * width, h);
+      else ctx.drawImage(side.layer, x * scale, y * scale, w * scale, h * scale,
+        x + w * (1 - width) / 2, y, w * width, h);
     }
   }
+
+  // Critically damped motion keeps a reversing flip from snapping.
+  function settle(t, key, speedKey, target, dt) {
+    const omega = 17, f = 1 + 2 * dt * omega;
+    const oo = omega * omega, inv = 1 / (f + dt * dt * oo);
+    const previous = t[key];
+    t[key] = (f * previous + dt * t[speedKey] + dt * dt * oo * target) * inv;
+    t[speedKey] = (t[speedKey] + dt * oo * (target - previous)) * inv;
+  }
+
+  function updatePage(dt) {
+    let moving = false;
+    for (const t of tiles) {
+      if (motion.matches) {
+        t.page = pageTarget; t.pageSpeed = 0; t.pageWait = 0;
+      } else if (t.pageWait > 0) {
+        t.pageWait -= dt; moving = true;
+      } else if (Math.abs(t.page - pageTarget) > .001 || Math.abs(t.pageSpeed) > .01) {
+        settle(t, 'page', 'pageSpeed', pageTarget, dt); moving = true;
+      } else { t.page = pageTarget; t.pageSpeed = 0; }
+    }
+    if (!moving && pageDone) { const done = pageDone; pageDone = null; done(); }
+    return moving;
+  }
+
+  // Turns every tile, each at its own moment, to show the section page behind
+  // the artwork (show) or to bring the artwork back. Resolves once all have turned.
+  function flipPage(show) {
+    pageTarget = show ? 1 : 0;
+    pageFlips++;
+    if (!current) {
+      for (const t of tiles) t.page = pageTarget;
+      return Promise.resolve();
+    }
+    for (const t of tiles) { t.pageWait = hash(t.c * 73 + t.r * 151 + pageFlips * 977) * .6; t.pageSpeed = 0; }
+    return new Promise(resolve => {
+      pageDone?.();
+      pageDone = resolve;
+      lastTime = 0; kick();
+    });
+  }
+  window.SpaceField = { flipPage };
 
   function completeReveal() {
     current = upcoming; current.paintedAt = -Infinity; upcoming = null; clicks = 0;
@@ -490,13 +578,7 @@
       } else if (t.wait > 0) {
         t.wait -= dt; moving = true;
       } else if (Math.abs(t.a - target) > .001 || Math.abs(t.velocity) > .01) {
-        // Critically damped motion keeps a reversing hover from snapping.
-        const omega = 17, f = 1 + 2 * dt * omega;
-        const oo = omega * omega, inv = 1 / (f + dt * dt * oo);
-        const previous = t.a;
-        t.a = (f * previous + dt * t.velocity + dt * dt * oo * target) * inv;
-        t.velocity = (t.velocity + dt * oo * (target - previous)) * inv;
-        moving = true;
+        settle(t, 'a', 'velocity', target, dt); moving = true;
       } else { t.a = target; t.velocity = 0; }
       if (oldFace !== (t.a >= .5)) {
         current.paintedAt = -Infinity; upcoming.paintedAt = -Infinity;
@@ -539,11 +621,13 @@
     const dt = lastTime ? Math.min((ms - lastTime) / 1000, .05) : 0;
     lastTime = ms;
     if (!motion.matches) time += dt;
-    const moving = updateTiles(dt);
+    const turning = updateTiles(dt), paging = updatePage(dt), moving = turning || paging;
     // Between character ticks the picture is unchanged, so on 120 Hz screens
     // only tile flips are drawn at display rate.
     if (moving || motion.matches || time - renderedAt >= TICK) { render(); renderedAt = time; }
-    if (moving || (!motion.matches)) kick();
+    // Once a section page fully covers the artwork, the animation rests.
+    const covered = pageTarget === 1 && !paging;
+    if (moving || (!motion.matches && !covered)) kick();
   }
 
   function kick() { if (!raf && visible && !document.hidden) raf = requestAnimationFrame(frame); }

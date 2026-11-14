@@ -60,8 +60,12 @@ ul { padding: 0; list-style: none; }
 }
 .fullscreen-button:hover { color: rgb(255 255 255 / .88); background: rgb(255 255 255 / .06); }
 .fullscreen-button svg { display: block; width: 19px; height: 19px; }
-.mast, .sky-tools, .links { transition: opacity 240ms; }
+.mast, .sky-tools, .links, .fullscreen-button, .sky::after { transition: opacity 240ms, color 180ms, background 180ms; }
 .sky.is-immersive .mast, .sky.is-immersive .sky-tools, .sky.is-immersive .links { opacity: 0; pointer-events: none; }
+html.page-shown .mast, html.page-shown .sky-tools, html.page-shown .links,
+html.page-shown .fullscreen-button, html.page-shown .sky::after { opacity: 0; pointer-events: none; }
+html.page-flipping .sky { z-index: 300; background: none; }
+html.page-flipping #field { pointer-events: none; }
 h1, #content h2 {
   color: #fff; font-family: Arial, Helvetica, sans-serif;
   font-size: clamp(1.5rem, 2.2vw, 2rem); font-weight: 600;
@@ -164,9 +168,16 @@ html.home body { height: 100%; overflow: hidden; overscroll-behavior: none; }
 }
 @media (max-width: 700px) {
   html.home { --page-x: var(--gutter); }
+  .sky::after {
+    background: linear-gradient(180deg,
+      rgb(7 9 13 / .72) 0%, rgb(7 9 13 / 0) 33%, rgb(7 9 13 / 0) 48%,
+      rgb(7 9 13 / .03) 54%, rgb(7 9 13 / .09) 60%, rgb(7 9 13 / .18) 66%, rgb(7 9 13 / .3) 72%,
+      rgb(7 9 13 / .45) 78%, rgb(7 9 13 / .6) 83%, rgb(7 9 13 / .74) 88%, rgb(7 9 13 / .86) 92%,
+      rgb(7 9 13 / .95) 96%, var(--ground) 100%);
+  }
   #field { touch-action: none; }
   .mast { padding-top: max(32px, env(safe-area-inset-top)); padding-left: max(var(--gutter), env(safe-area-inset-left)); }
-  .fullscreen-button { top: max(24px, env(safe-area-inset-top)); right: max(var(--gutter), env(safe-area-inset-right)); }
+  .fullscreen-button { display: none; }
   .sky-tools { bottom: calc(80px + env(safe-area-inset-bottom)); max-width: calc(100% - var(--gutter) * 2); gap: 8px; }
   .caption { font-size: .625rem; }
   .links { left: var(--gutter); right: var(--gutter); bottom: max(20px, env(safe-area-inset-bottom)); justify-content: space-between; gap: 12px; }
