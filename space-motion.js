@@ -365,6 +365,9 @@
     const spot = new Float32Array(2);
     const flowX = new Float32Array(n), flowY = new Float32Array(n);
     const swallow = new Float32Array(n), dragX = new Float32Array(n), dragY = new Float32Array(n);
+    // Spaghettification: how hard a symbol is being stretched, along which
+    // screen direction (towards the hole), and how far the lens has pulled it in.
+    const strain = new Float32Array(n), axis = new Float32Array(n), sinkX = new Float32Array(n), sinkY = new Float32Array(n);
 
     const fields = profile.layers.map((layer, index) => {
       const values = new Float32Array(n * 4);
@@ -440,6 +443,17 @@
           gait = Math.min(2.4, 1 / Math.max(.45, radius));
           const gone = Math.max(0, Math.min(1, (1.05 - radius) / .25));
           if (gone > swallow[r*cols+c]) swallow[r*cols+c] = gone * gone * (3 - 2 * gone);
+          {
+            const k = r*cols+c, t = Math.max(0, Math.min(1, (2.6 - radius) / 1.6)), pull = t * t * (3 - 2 * t);
+            if (pull > strain[k]) {
+              const rx = Math.cos(angle) * layer.radius[0], ry = Math.sin(angle) * layer.radius[1];
+              const ox = (rx*ca - ry*sa) * sxp, oy = (rx*sa + ry*ca) * syp, ol = Math.hypot(ox, oy) || 1;
+              strain[k] = pull; axis[k] = Math.atan2(oy, ox);
+              // Fisheye: symbols bunch in towards the horizon, most strongly at its edge.
+              const sink = Math.min(radius - .9, .5) * ol * pull * .45;
+              sinkX[k] = -ox / ol * sink; sinkY[k] = -oy / ol * sink;
+            }
+          }
           // Lensing: the photograph is sampled from further out and a little
           // around, so the picture itself looks pulled in and twisted near the hole.
           if (radius >= .9) {
@@ -563,7 +577,7 @@
 
     return {
       name: profile.name, stars: profile.stars,
-      dye, pace, pull, kindOf, flow, step, inject, swallow,
+      dye, pace, pull, kindOf, flow, step, inject, swallow, strain, axis, sinkX, sinkY,
       sample(i, time, out) {
         let x = 0, y = 0, energy = 0, weight = 0;
         const at = i*4;

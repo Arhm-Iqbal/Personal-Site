@@ -396,6 +396,21 @@
         }
         const visibility = Math.max(present, clamp(dyed * 1.5));
         mg.globalAlpha = clamp((.45 + tone * .55) * visibility * (1 - protection * .7) * (1 - gone));
+        const pulled = field.strain ? field.strain[i] : 0;
+        if (pulled > .02) {
+          // Spaghettification: the symbol is drawn long along the line to the
+          // hole and thin across it, and the lens pulls it inward. A slow ripple
+          // keeps the stretch fluid as symbols stream past.
+          const ripple = pulled * (.86 + .14 * Math.sin(time * 2.6 + i * .37));
+          const sx = x + field.sinkX[i], sy = y + field.sinkY[i];
+          mg.save();
+          mg.translate(sx, sy); mg.rotate(field.axis[i]);
+          mg.scale(1 + ripple * 2.4, 1 - ripple * .6);
+          mg.fillText(char, 0, 0);
+          mg.restore();
+          if (heat > .08 && pulled < .35) hot.push(char, sx, sy, heat * .6 * (1 - gone));
+          continue;
+        }
         mg.fillText(char, x, y);
         if (heat > .08) hot.push(char, x, y, heat * .6 * (1 - gone));
       }
