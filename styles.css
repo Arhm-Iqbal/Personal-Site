@@ -197,18 +197,23 @@ html.home body { height: 100%; overflow: hidden; overscroll-behavior: none; }
   .group { margin-top: 40px; }
   .shelf { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 18px; }
 }
-/* Cursor: a small dithered twin-pronged spear, drawn by the system so it never
-   lags or jumps. The point is the hotspot. Mouse devices only; touch is untouched. */
+/* Cursor: a dithered twin-pronged spear with a twisted neck and a pierced diamond
+   pommel, drawn by the system so it never lags. Ctrl+A cycles its colour
+   (cursor.js). Mouse devices only; touch is untouched. */
+:root { --spear: url("assets/cursor/spear.png"); --spear-2x: url("assets/cursor/spear@2x.png"); --spear-hover: url("assets/cursor/spear-hover.png"); --spear-hover-2x: url("assets/cursor/spear-hover@2x.png"); }
+:root[data-spear="blue"] { --spear: url("assets/cursor/spear-blue.png"); --spear-2x: url("assets/cursor/spear-blue@2x.png"); --spear-hover: url("assets/cursor/spear-hover-blue.png"); --spear-hover-2x: url("assets/cursor/spear-hover-blue@2x.png"); }
+:root[data-spear="green"] { --spear: url("assets/cursor/spear-green.png"); --spear-2x: url("assets/cursor/spear-green@2x.png"); --spear-hover: url("assets/cursor/spear-hover-green.png"); --spear-hover-2x: url("assets/cursor/spear-hover-green@2x.png"); }
+:root[data-spear="gold"] { --spear: url("assets/cursor/spear-gold.png"); --spear-2x: url("assets/cursor/spear-gold@2x.png"); --spear-hover: url("assets/cursor/spear-hover-gold.png"); --spear-hover-2x: url("assets/cursor/spear-hover-gold@2x.png"); }
+:root[data-spear="violet"] { --spear: url("assets/cursor/spear-violet.png"); --spear-2x: url("assets/cursor/spear-violet@2x.png"); --spear-hover: url("assets/cursor/spear-hover-violet.png"); --spear-hover-2x: url("assets/cursor/spear-hover-violet@2x.png"); }
+:root[data-spear="white"] { --spear: url("assets/cursor/spear-white.png"); --spear-2x: url("assets/cursor/spear-white@2x.png"); --spear-hover: url("assets/cursor/spear-hover-white.png"); --spear-hover-2x: url("assets/cursor/spear-hover-white@2x.png"); }
 @media (hover: hover) and (pointer: fine) {
   html, #field {
-    cursor: url("assets/cursor/spear.png") 3 1, auto;
-    cursor: -webkit-image-set(url("assets/cursor/spear.png") 1x, url("assets/cursor/spear@2x.png") 2x) 3 1, auto;
-    cursor: image-set(url("assets/cursor/spear.png") 1x, url("assets/cursor/spear@2x.png") 2x) 3 1, auto;
+    cursor: var(--spear) 2 3, auto;
+    cursor: image-set(var(--spear) 1x, var(--spear-2x) 2x) 2 3, auto;
   }
   a, button, [role="button"], label, summary, select, .fullscreen-button, .sound-button, .mobile-back {
-    cursor: url("assets/cursor/spear-hover.png") 3 1, pointer;
-    cursor: -webkit-image-set(url("assets/cursor/spear-hover.png") 1x, url("assets/cursor/spear-hover@2x.png") 2x) 3 1, pointer;
-    cursor: image-set(url("assets/cursor/spear-hover.png") 1x, url("assets/cursor/spear-hover@2x.png") 2x) 3 1, pointer;
+    cursor: var(--spear-hover) 2 3, pointer;
+    cursor: image-set(var(--spear-hover) 1x, var(--spear-hover-2x) 2x) 2 3, pointer;
   }
 }
 
