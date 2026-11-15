@@ -441,9 +441,42 @@
     g.globalAlpha = 1;
   }
 
+  // The new name decodes out of glyph noise, the way the artwork resolves out of
+  // its tiles: each letter cycles through symbols, then locks in, roughly left to
+  // right. The link's accessible name is set at once so readers never hear noise.
+  const noiseGlyphs = '01<>/\\[]{}=+*#%&@$§¶∆◊¤±÷×π∂∑∏√∞≈≠†‡¦¬µØÞð';
+  let decodeFrame = 0, captionShown = false;
+  function decodeCaption(text) {
+    cancelAnimationFrame(decodeFrame);
+    caption.setAttribute('aria-label', text);
+    if (!captionShown || motion.matches) { caption.textContent = text; captionShown = true; return; }
+    const from = caption.textContent;
+    const length = Math.max(from.length, text.length);
+    const start = performance.now();
+    const spans = Array.from({ length }, (_, i) => {
+      const lock = 160 + (i / length) * 560 + Math.random() * 220;
+      return { lock, next: 0, glyph: '' };
+    });
+    const tick = now => {
+      const t = now - start;
+      let out = '', done = true;
+      for (let i = 0; i < length; i++) {
+        const s = spans[i], target = text[i] ?? '';
+        if (t >= s.lock) { out += target; continue; }
+        done = false;
+        if (target === ' ' && t > s.lock * .5) { out += ' '; continue; }
+        if (t >= s.next) { s.glyph = noiseGlyphs[Math.random() * noiseGlyphs.length | 0]; s.next = t + 45 + Math.random() * 45; }
+        out += t < 90 && from[i] ? from[i] : s.glyph;
+      }
+      caption.textContent = out;
+      if (!done) decodeFrame = requestAnimationFrame(tick);
+    };
+    decodeFrame = requestAnimationFrame(tick);
+  }
+
   function setCaption() {
     const info = images[current.index];
-    caption.textContent = info.name;
+    decodeCaption(info.name);
     caption.href = info.source;
     caption.title = info.credit;
     hero.dataset.image = String(current.index);
