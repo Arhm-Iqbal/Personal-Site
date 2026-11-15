@@ -1,7 +1,7 @@
 // Hidden behind a code (found at the end of Books). Drop more images in
 // assets/egg/ and add them here; one is picked at random each time.
 (function () {
-  const IMAGES = ['assets/egg/3893.jpg', 'assets/egg/3894.jpg', 'assets/egg/3895.jpg'];
+  const IMAGES = ['assets/egg/3893.jpg', 'assets/egg/3894.jpg', 'assets/egg/3895.jpg', 'assets/egg/kobeni-1.jpg', 'assets/egg/kobeni-2.jpg', 'assets/egg/kobeni-3.jpg'];
   const CODE = '99942';
   const egg = document.getElementById('egg');
   const open = document.getElementById('egg-open');
