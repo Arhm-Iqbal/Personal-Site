@@ -715,8 +715,8 @@
     layout();
     await document.fonts.load(`12px ${FONT}`).catch(() => {});
     measureGlyphs();
-    // Keep the original opening composition; subsequent photographs are random.
-    let index = 0;
+    // Open on a random photograph, drawn from the same shuffled bag as the rest.
+    let index = pick(-1);
     while (index !== undefined) {
       try {
         const img = await load(index); current = prepare(index, img); break;
