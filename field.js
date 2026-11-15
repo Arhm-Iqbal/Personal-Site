@@ -354,7 +354,7 @@
     const sky = []; // faint characters where there is no light at all: char, x, y
     const kx = sw / W, ky = sh / H;
     const displacement = new Float32Array(3);
-    let bent = false; // whether the stencil still holds a stretched symbol's matrix
+    const stamps = []; // stretched symbols, drawn after the rest: char, x, y, stretch, cell, alpha
     const atlas = field.strain ? glyphAtlas() : null;
     for (let r = 0; r < rows; r++) {
       const y = r * cellH + cellH / 2;
@@ -421,27 +421,34 @@
           // Spaghettification: the symbol is drawn long along the line to the
           // hole and thin across it, and the lens pulls it inward. A slow ripple
           // keeps the stretch fluid as symbols stream past.
-          // One matrix per symbol (rotate to the hole, stretch, place), no save/restore.
+          // Queued and stamped after the plain symbols, so text and stamps
+          // are each drawn in one uninterrupted run.
           const ripple = pulled * (.86 + .14 * Math.sin(time * 2.6 + i * .37));
           const sx = x + field.sinkX[i], sy = y + field.sinkY[i];
-          const cs = field.axisC[i] * scale, sn = field.axisS[i] * scale;
-          const along = 1 + ripple * 2.4, across = 1 - ripple * .6;
-          mg.setTransform(cs * along, sn * along, -sn * across, cs * across, sx * scale, sy * scale);
-          // Stretched text defeats the browser's glyph cache, so stretched
-          // symbols are stamped from a pre-rendered sheet instead.
-          const at = atlas.index.get(char);
-          if (at === undefined) mg.fillText(char, 0, 0);
-          else mg.drawImage(atlas.sheet, at * atlas.px, 0, atlas.px, atlas.py, -atlas.w / 2, -atlas.h / 2, atlas.w, atlas.h);
-          bent = true;
+          stamps.push(char, sx, sy, ripple, i, mg.globalAlpha);
           if (heat > .08 && pulled < .35) hot.push(char, sx, sy, heat * .6 * (1 - gone));
           continue;
         }
-        if (bent) { mg.setTransform(scale, 0, 0, scale, 0, 0); bent = false; }
         mg.fillText(char, x, y);
         if (heat > .08) hot.push(char, x, y, heat * .6 * (1 - gone));
       }
     }
-    if (bent) mg.setTransform(scale, 0, 0, scale, 0, 0);
+    if (stamps.length) {
+      // Each stretched symbol: one matrix (rotate to the hole, stretch, place),
+      // stamped from a pre-rendered sheet, since stretched text defeats the
+      // browser's glyph cache.
+      for (let k = 0; k < stamps.length; k += 6) {
+        const char = stamps[k], sx = stamps[k + 1], sy = stamps[k + 2], ripple = stamps[k + 3], i = stamps[k + 4];
+        const cs = field.axisC[i] * scale, sn = field.axisS[i] * scale;
+        const along = 1 + ripple * 2.4, across = 1 - ripple * .6;
+        mg.globalAlpha = stamps[k + 5];
+        mg.setTransform(cs * along, sn * along, -sn * across, cs * across, sx * scale, sy * scale);
+        const at = atlas.index.get(char);
+        if (at === undefined) mg.fillText(char, 0, 0);
+        else mg.drawImage(atlas.sheet, at * atlas.px, 0, atlas.px, atlas.py, -atlas.w / 2, -atlas.h / 2, atlas.w, atlas.h);
+      }
+      mg.setTransform(scale, 0, 0, scale, 0, 0);
+    }
     mg.globalAlpha = 1;
     mg.globalCompositeOperation = 'source-in';
     mg.drawImage(scene.vivid, 0, 0, W, H);
