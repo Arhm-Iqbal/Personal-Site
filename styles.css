@@ -224,10 +224,10 @@ html.home body { height: 100%; overflow: hidden; overscroll-behavior: none; }
 
 /* Easter egg: a quiet door at the very bottom, a hint at the end of Books. */
 .whisper { margin-top: 56px; text-align: center; color: #2c2f34; font-family: var(--mono); font-size: .625rem; letter-spacing: .04em; }
-.egg-door { margin: 0 0 18px -10px; line-height: 1; }
+.egg-door { margin: 0 0 6px; line-height: 1; }
 .egg-door button { pointer-events: auto; }
 .sky.is-immersive .egg-door button, html.page-shown .egg-door button { pointer-events: none; }
-.egg-door button { padding: 6px 10px; border: 0; background: none; color: rgb(255 255 255 / .22); font: .625rem var(--mono); letter-spacing: .06em; cursor: pointer; transition: color 180ms; }
+.egg-door button { padding: 4px 0; margin-left: .06em; border: 0; background: none; color: rgb(255 255 255 / .22); font: .625rem var(--mono); letter-spacing: .06em; cursor: pointer; transition: color 180ms; }
 .egg-door button:hover { color: rgb(255 255 255 / .6); }
 .egg { position: fixed; inset: 0; z-index: 500; display: grid; place-items: center; padding: 16px; background: rgb(3 4 6 / .82); }
 .egg[hidden] { display: none; }
