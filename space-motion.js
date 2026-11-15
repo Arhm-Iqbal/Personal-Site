@@ -15,6 +15,10 @@
   // A shell whose fronts start at a light source and spread through the cloud,
   // bending around its bright and dark regions (see spread below).
   const glow = (center, amount, seconds, phase = 0) => ({ type: 'shell', glow: true, center, radius: [.3, .3], tilt: 0, width: .5, amount, seconds, phase });
+  // A spiral: lanes wind out of (or into) an event horizon along logarithmic
+  // arms, the way Hawking radiation might peel away from a black hole. wind
+  // sets how tightly the arms coil; a negative period sends symbols inward.
+  const spiral = (center, radius, tilt, width, amount, seconds, phase = 0, wind = 2) => ({ type: 'spiral', center, radius, tilt, width, amount, seconds, phase, wind });
   const score = (name, stars, layers) => ({ name, stars, layers });
   const profiles = {
     'eagle-nebula': score('Three rising pillar rims', .10, [
@@ -194,10 +198,64 @@
     'space-heic1520a': score('Veil separated red and blue braided shock filaments', .12, [
       stream([[.02,.91],[.23,.70],[.46,.54],[.67,.29],[.98,.08]],.025,11,14),
       stream([[.03,.97],[.28,.80],[.52,.63],[.76,.40],[.99,.28]],.025,8,-17,1.8),
-      stream([[.16,.89],[.38,.77],[.58,.67],[.82,.51],[.97,.41]],.023,6,12,3.5)])
+      stream([[.16,.89],[.38,.77],[.58,.67],[.82,.51],[.97,.41]],.023,6,12,3.5)]),
+    // Black holes. Each horizon sheds a spiral of symbols, wound differently for each.
+    'space-svs13326': score('Hawking spiral shed from a lensed accretion disk', .04, [
+      spiral([.50,.52],[.085,.065],0,.9,10,8,0,2.4),
+      ring([.50,.53],[.31,.12],0,.22,8,-13),
+      ring([.50,.47],[.14,.11],0,.16,5,9,2),
+      spiral([.50,.52],[.36,.15],0,.45,5,-17,3,-1.3)]),
+    'space-eso1907a': score('M87* photon ring shedding a slow outward spiral', .03, [
+      spiral([.50,.44],[.075,.13],0,1.1,10,9,0,2.8),
+      ring([.50,.44],[.09,.155],0,.3,7,-11,1),
+      spiral([.50,.44],[.17,.29],0,.5,4,-19,2,-1.7)]),
+    'space-eso2208-eht-mwa': score('Sagittarius A* knots orbiting a counter-wound spiral', .03, [
+      spiral([.50,.49],[.11,.11],0,1,10,10,1,-2.5),
+      ring([.50,.49],[.22,.22],0,.28,8,12),
+      glow([.61,.36],4,16,2),
+      glow([.61,.66],3,18,3.5)]),
+    'space-eso2105a': score('Polarised M87* field lines coiling off the horizon', .03, [
+      spiral([.50,.43],[.10,.10],0,1.1,11,9,0,3.4),
+      ring([.50,.45],[.24,.24],0,.25,6,-15,2),
+      stream([[.71,.38],[.67,.57],[.53,.66],[.36,.62]],.07,7,8,3)]),
+    'space-opo0020a': score('M87 core spiral launching its blue jet', .14, [
+      spiral([.18,.185],[.04,.04],0,1.4,8,7,1,2.2),
+      stream([[.18,.18],[.27,.28],[.37,.36],[.46,.47],[.56,.54],[.63,.60],[.67,.67]],.045,10,7),
+      shell([.18,.18],[.32,.32],0,.4,3,21,2)]),
+    'space-weic2615a': score('Centaurus A warped disk around a radiating core', .10, [
+      ring([.49,.52],[.42,.20],-.10,.30,7,20),
+      stream([[.12,.62],[.32,.56],[.49,.50],[.66,.45],[.88,.40]],.06,8,13,1),
+      spiral([.49,.50],[.05,.12],0,.9,8,8,2,2.2)]),
+    // Planets. Bands, storms and rings each keep their own motion.
+    'space-heic1708a': score('Jupiter counter-flowing zonal jets and Great Red Spot', .02, [
+      stream([[.16,.30],[.50,.28],[.84,.30]],.025,6,11),
+      stream([[.12,.38],[.50,.36],[.88,.38]],.03,7,-9,1),
+      stream([[.11,.47],[.50,.46],[.89,.47]],.025,5,13,2),
+      stream([[.12,.56],[.50,.56],[.88,.56]],.03,7,-10,3),
+      stream([[.15,.66],[.50,.67],[.85,.66]],.025,5,12,4),
+      ring([.265,.605],[.05,.035],0,.5,7,-6),
+      ring([.67,.68],[.025,.02],0,.5,4,-5,2)]),
+    'space-opo0124a': score('Mars turning under its polar caps and dust', .02, [
+      stream([[.10,.40],[.50,.37],[.90,.40]],.08,6,16),
+      stream([[.08,.60],[.50,.62],[.92,.60]],.08,6,18,2),
+      ring([.50,.11],[.20,.05],0,.35,5,-10,1),
+      ring([.50,.90],[.24,.05],0,.35,4,12,3),
+      traced([.50,.50],.4,4,19,2)]),
+    'space-weic2214a': score('Neptune ring shear and Triton’s starburst spikes', .2, [
+      ring([.555,.62],[.17,.05],-.05,.12,8,12),
+      ring([.555,.615],[.06,.05],0,.4,5,-9,1),
+      stream([[.38,.23],[.38,.02]],.02,6,7),
+      stream([[.38,.23],[.38,.45]],.02,6,7,1),
+      stream([[.38,.23],[.12,.23]],.02,5,8,2),
+      stream([[.38,.23],[.64,.23]],.02,5,8,3)]),
+    'space-weic2332a': score('Uranus nested rings counter-rotating around a bright pole', .1, [
+      ring([.49,.52],[.19,.27],0,.12,8,15),
+      ring([.49,.52],[.215,.30],0,.1,5,-21,1),
+      ring([.49,.52],[.07,.10],0,.5,5,9,2),
+      glow([.52,.48],4,14,3)])
   };
 
-  const KIND = { stream: 1, ring: 2, shell: 3 };
+  const KIND = { stream: 1, ring: 2, shell: 3, spiral: 4 };
   const LANE = 15;   // width of one lane, in screen pixels
   const STEP = 10;   // distance a symbol travels before the next one takes its cell
   const hash2 = (a, b) => {
@@ -323,7 +381,7 @@
         ? segments.reduce((sum, g) => sum + Math.hypot(g.dx * sxp, g.dy * syp), 0)
         : edge ? edge.mean * sxp
         : Math.sqrt(((layer.radius[0] * sxp) ** 2 + (layer.radius[1] * syp) ** 2) / 2);
-      let speed = kind === 1 ? span / period : kind === 2 ? Math.PI * 2 * span / period * .55 : span / period * 1.6;
+      let speed = kind === 1 ? span / period : kind === 2 ? Math.PI * 2 * span / period * .55 : kind === 4 ? span * 3.2 / period : span / period * 1.6;
       speed = Math.max(14, Math.min(120, speed)) * .45;
 
       for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
@@ -360,6 +418,22 @@
           vx = nx - layer.center[0] || 1e-6; vy = ny - layer.center[1];
           strip = Math.round(angle * span * (edge.rim ? 1 : .5) / LANE);
           travelled = radius * span;
+        } else if (kind === 4) {
+          // Spiral: each lane is one logarithmic arm (constant angle minus
+          // wind times log radius). Symbols ride the arm out of the horizon,
+          // brightest just outside it and fading as they escape.
+          const x = nx - layer.center[0], y = ny - layer.center[1];
+          const ex = (x*ca + y*sa)/layer.radius[0], ey = (-x*sa + y*ca)/layer.radius[1];
+          const radius = Math.max(.04, Math.hypot(ex, ey)), angle = Math.atan2(ey, ex);
+          const log = Math.log(radius), wind = layer.wind;
+          let arm = (angle - wind * log) % (Math.PI * 2); if (arm < 0) arm += Math.PI * 2;
+          distance = radius < 1 ? (1 - radius) * 1.6 : (radius - 1) * .3;
+          progress = log * .65 + arm * .08;
+          const tx = (Math.cos(angle) - wind * Math.sin(angle)) * layer.radius[0];
+          const ty = (Math.sin(angle) + wind * Math.cos(angle)) * layer.radius[1];
+          vx = tx*ca - ty*sa; vy = tx*sa + ty*ca;
+          strip = Math.round(arm * span * 1.4 / LANE);
+          travelled = log * span * Math.hypot(1, wind);
         } else {
           const x = nx - layer.center[0], y = ny - layer.center[1];
           const ex = (x*ca + y*sa)/layer.radius[0], ey = (-x*sa + y*ca)/layer.radius[1];
@@ -400,14 +474,14 @@
           claim[i] = bid;
           const id = index * 8192 + strip + 4096;
           // Neighbouring lanes never move at quite the same speed.
-          const own = kind === 3 ? 1 : .75 + .5 * hash2(id, 71);
-          lane[i] = id; along[i] = travelled; kindOf[i] = kind;
+          const own = kind >= 3 ? 1 : .75 + .5 * hash2(id, 71);
+          lane[i] = id; along[i] = travelled; kindOf[i] = kind === 4 ? 3 : kind;
           // Nothing stands still: even the furthest cell keeps a slow walk.
           pace[i] = heading * Math.max(5.5, speed * gait * own * (.45 + .55 * hold));
           reach[i] = (1.5 + layer.amount * .55) * (.45 + .55 * hold);
           pull[i] = envelope; turn[i] = layer.phase;
           // A traced shell sends two or three slow fronts across its own radius.
-          wave[i] = edge ? span / (edge.rim ? 2.4 : 3) : 150; surge[i] = edge ? 1.1 : 2;
+          wave[i] = edge ? span / (edge.rim ? 2.4 : 3) : kind === 4 ? span * .9 : 150; surge[i] = edge ? 1.1 : kind === 4 ? 1.4 : 2;
           flowX[i] = vx / length * pace[i] / .45; flowY[i] = vy / length * pace[i] / .45;
         }
       }

@@ -335,5 +335,85 @@ window.SPACE_IMAGES = [
     "fy": 0.5,
     "source": "https://esahubble.org/images/heic1520a/",
     "credit": "NASA, ESA, Hubble Heritage Team"
+  },
+  {
+    "src": "assets/space-svs13326.jpg",
+    "name": "Black Hole Accretion Disk",
+    "fx": 0.5,
+    "fy": 0.52,
+    "source": "https://svs.gsfc.nasa.gov/13326",
+    "credit": "NASA’s Goddard Space Flight Center / Jeremy Schnittman"
+  },
+  {
+    "src": "assets/space-eso1907a.jpg",
+    "name": "M87*, the First Black Hole Image",
+    "fx": 0.5,
+    "fy": 0.44,
+    "source": "https://www.eso.org/public/images/eso1907a/",
+    "credit": "EHT Collaboration"
+  },
+  {
+    "src": "assets/space-eso2208-eht-mwa.jpg",
+    "name": "Sagittarius A*",
+    "fx": 0.5,
+    "fy": 0.49,
+    "source": "https://www.eso.org/public/images/eso2208-eht-mwa/",
+    "credit": "EHT Collaboration"
+  },
+  {
+    "src": "assets/space-eso2105a.jpg",
+    "name": "M87* in Polarised Light",
+    "fx": 0.5,
+    "fy": 0.43,
+    "source": "https://www.eso.org/public/images/eso2105a/",
+    "credit": "EHT Collaboration"
+  },
+  {
+    "src": "assets/space-opo0020a.jpg",
+    "name": "The Jet of M87",
+    "fx": 0.35,
+    "fy": 0.38,
+    "source": "https://esahubble.org/images/opo0020a/",
+    "credit": "The Hubble Heritage Team (STScI/AURA) and NASA/ESA"
+  },
+  {
+    "src": "assets/space-weic2615a.jpg",
+    "name": "Centaurus A",
+    "fx": 0.49,
+    "fy": 0.5,
+    "source": "https://esawebb.org/images/weic2615a/",
+    "credit": "NASA, ESA, CSA, STScI. Image Processing: A. Pagan (STScI), J. Depasquale (STScI), M. Garcia Marin (ESA Office at STScI)"
+  },
+  {
+    "src": "assets/space-heic1708a.jpg",
+    "name": "Jupiter",
+    "fx": 0.5,
+    "fy": 0.5,
+    "source": "https://esahubble.org/images/heic1708a/",
+    "credit": "NASA, ESA, and A. Simon (GSFC)"
+  },
+  {
+    "src": "assets/space-opo0124a.jpg",
+    "name": "Mars",
+    "fx": 0.5,
+    "fy": 0.5,
+    "source": "https://esahubble.org/images/opo0124a/",
+    "credit": "NASA/ESA and The Hubble Heritage Team STScI/AURA"
+  },
+  {
+    "src": "assets/space-weic2214a.jpg",
+    "name": "Neptune and Its Rings",
+    "fx": 0.55,
+    "fy": 0.6,
+    "source": "https://esawebb.org/images/weic2214a/",
+    "credit": "NASA, ESA, CSA, and STScI"
+  },
+  {
+    "src": "assets/space-weic2332a.jpg",
+    "name": "Uranus and Its Rings",
+    "fx": 0.49,
+    "fy": 0.52,
+    "source": "https://esawebb.org/images/weic2332a/",
+    "credit": "NASA, ESA, CSA, STScI"
   }
 ];

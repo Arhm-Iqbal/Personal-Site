@@ -253,3 +253,12 @@ Source: ESA/Hubble. Used under [CC BY 4.0](https://esahubble.org/copyright/).
 - File: `assets/space-heic1520a.jpg`
 - Source: https://esahubble.org/images/heic1520a/
 - Credit: NASA, ESA, Hubble Heritage Team
+
+## Black holes and planets (added 2026-11-15)
+
+Webb images from ESA/Webb and EHT images from ESO, both CC BY 4.0. The accretion disk is from the NASA Scientific Visualization Studio. Full credits per image are in `space-images.js` and `credits.html`.
+
+- `space-svs13326.jpg`: https://svs.gsfc.nasa.gov/13326
+- `space-eso1907a.jpg`, `space-eso2208-eht-mwa.jpg`, `space-eso2105a.jpg`: https://www.eso.org/public/images/
+- `space-opo0020a.jpg`, `space-heic1708a.jpg`, `space-opo0124a.jpg`: https://esahubble.org/images/
+- `space-weic2214a.jpg`, `space-weic2332a.jpg`, `space-weic2615a.jpg`: https://esawebb.org/images/
