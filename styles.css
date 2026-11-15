@@ -69,6 +69,15 @@ ul { padding: 0; list-style: none; }
 .sky.is-immersive .mast, .sky.is-immersive .sky-tools, .sky.is-immersive .links { opacity: 0; pointer-events: none; }
 html.page-shown .mast, html.page-shown .sky-tools, html.page-shown .links,
 html.page-shown .fullscreen-button, html.page-shown .sound-button, html.page-shown .sky::after { opacity: 0; pointer-events: none; }
+/* Coming back home: the name and menu settle in with a slow ease-out and a
+   few pixels of lift, the name first and the controls just after. */
+html.page-shown .mast, html.page-shown .sky-tools, html.page-shown .links { transform: translateY(8px); }
+html.page-returning .mast, html.page-returning .sky-tools, html.page-returning .links,
+html.page-returning .fullscreen-button, html.page-returning .sound-button, html.page-returning .sky::after {
+  transition: opacity 720ms cubic-bezier(.22, 1, .36, 1), transform 720ms cubic-bezier(.22, 1, .36, 1);
+}
+html.page-returning .links, html.page-returning .sky-tools { transition-delay: 90ms; }
+html.page-returning .fullscreen-button, html.page-returning .sound-button { transition-delay: 160ms; }
 html.page-flipping .sky { z-index: 300; background: none; }
 html.page-flipping #field { pointer-events: none; }
 h1, #content h2 {

@@ -38,6 +38,7 @@
       back.focus({ preventScroll: true });
       state = 'opening';
       const mine = ++run;
+      root.classList.remove('page-returning');
       root.classList.add('page-shown', 'page-flipping');
       flipPage(true).then(() => {
         if (mine !== run) return;
@@ -77,7 +78,9 @@
       content.classList.remove('page-open');
       content.querySelectorAll('.page-active').forEach(node => node.classList.remove('page-active'));
       content.setAttribute('aria-hidden', 'true');
+      root.classList.add('page-returning');
       root.classList.remove('page-shown', 'page-flipping');
+      setTimeout(() => { if (state === 'home') root.classList.remove('page-returning'); }, 1000);
       trigger?.focus({ preventScroll: true });
       trigger = null;
     });
