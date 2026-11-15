@@ -232,7 +232,7 @@ html.page-shown .egg-door, .sky.is-immersive .egg-door { opacity: 0; pointer-eve
 .egg[hidden] { display: none; }
 .egg-box { position: relative; display: grid; justify-items: center; gap: 14px; max-width: 100%; }
 .egg-form { display: flex; flex-direction: column; align-items: center; text-align: center; margin: 0 auto; }
-.egg-form[hidden] { display: none; }
+.egg-form[hidden], .egg-img[hidden] { display: none; }
 .egg-hint { color: var(--ink-dim); font: .75rem var(--mono); text-align: center; margin-bottom: 14px; }
 .egg-form input { width: min(260px, 80vw); padding: 10px 12px; border: 1px solid var(--line); border-radius: 0; background: var(--ground); color: var(--ink); font: 1rem var(--mono); letter-spacing: .2em; text-align: center; outline: none; }
 .egg-form input:focus { border-color: #62646a; }

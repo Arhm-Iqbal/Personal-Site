@@ -13,7 +13,7 @@
 
   function show() {
     egg.hidden = false; egg.classList.remove('is-open-img');
-    form.hidden = false; img.hidden = true; input.value = '';
+    form.hidden = false; img.hidden = true; img.removeAttribute('src'); input.value = '';
     form.classList.remove('is-wrong');
     input.focus();
   }
