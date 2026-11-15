@@ -15,9 +15,9 @@
   // A shell whose fronts start at a light source and spread through the cloud,
   // bending around its bright and dark regions (see spread below).
   const glow = (center, amount, seconds, phase = 0) => ({ type: 'shell', glow: true, center, radius: [.3, .3], tilt: 0, width: .5, amount, seconds, phase });
-  // A spiral: lanes wind out of (or into) an event horizon along logarithmic
-  // arms, the way Hawking radiation might peel away from a black hole. wind
-  // sets how tightly the arms coil; a negative period sends symbols inward.
+  // A spiral: lanes wind into an event horizon along logarithmic arms. Symbols
+  // fall faster as they near it and vanish once they cross. radius is the
+  // horizon; wind sets how tightly (and which way) the arms coil.
   const spiral = (center, radius, tilt, width, amount, seconds, phase = 0, wind = 2) => ({ type: 'spiral', center, radius, tilt, width, amount, seconds, phase, wind });
   const score = (name, stars, layers) => ({ name, stars, layers });
   const profiles = {
@@ -199,33 +199,33 @@
       stream([[.02,.91],[.23,.70],[.46,.54],[.67,.29],[.98,.08]],.025,11,14),
       stream([[.03,.97],[.28,.80],[.52,.63],[.76,.40],[.99,.28]],.025,8,-17,1.8),
       stream([[.16,.89],[.38,.77],[.58,.67],[.82,.51],[.97,.41]],.023,6,12,3.5)]),
-    // Black holes. Each horizon sheds a spiral of symbols, wound differently for each.
-    'space-svs13326': score('Hawking spiral shed from a lensed accretion disk', .04, [
-      spiral([.50,.52],[.085,.065],0,.9,10,8,0,2.4),
+    // Black holes. Each horizon swallows a spiral of symbols, wound differently for each.
+    'space-svs13326': score('Letters spiralling into a lensed accretion disk', .04, [
+      spiral([.50,.505],[.09,.07],0,1,10,8,0,2.4),
       ring([.50,.53],[.31,.12],0,.22,8,-13),
       ring([.50,.47],[.14,.11],0,.16,5,9,2),
-      spiral([.50,.52],[.36,.15],0,.45,5,-17,3,-1.3)]),
-    'space-eso1907a': score('M87* photon ring shedding a slow outward spiral', .03, [
-      spiral([.50,.44],[.075,.13],0,1.1,10,9,0,2.8),
+      ]),
+    'space-eso1907a': score('M87* photon ring swallowing a slow inward spiral', .03, [
+      spiral([.50,.44],[.05,.085],0,1.2,10,9,0,2.8),
       ring([.50,.44],[.09,.155],0,.3,7,-11,1),
-      spiral([.50,.44],[.17,.29],0,.5,4,-19,2,-1.7)]),
+      ]),
     'space-eso2208-eht-mwa': score('Sagittarius A* knots orbiting a counter-wound spiral', .03, [
-      spiral([.50,.49],[.11,.11],0,1,10,10,1,-2.5),
+      spiral([.50,.49],[.085,.085],0,1.1,10,10,1,-2.5),
       ring([.50,.49],[.22,.22],0,.28,8,12),
       glow([.61,.36],4,16,2),
       glow([.61,.66],3,18,3.5)]),
-    'space-eso2105a': score('Polarised M87* field lines coiling off the horizon', .03, [
-      spiral([.50,.43],[.10,.10],0,1.1,11,9,0,3.4),
+    'space-eso2105a': score('Polarised M87* field lines coiling into the horizon', .03, [
+      spiral([.50,.43],[.075,.075],0,1.2,11,9,0,3.4),
       ring([.50,.45],[.24,.24],0,.25,6,-15,2),
       stream([[.71,.38],[.67,.57],[.53,.66],[.36,.62]],.07,7,8,3)]),
-    'space-opo0020a': score('M87 core spiral launching its blue jet', .14, [
-      spiral([.18,.185],[.04,.04],0,1.4,8,7,1,2.2),
+    'space-opo0020a': score('M87 core swallowing its surroundings beside the blue jet', .14, [
+      spiral([.18,.185],[.025,.025],0,1.6,8,7,1,2.2),
       stream([[.18,.18],[.27,.28],[.37,.36],[.46,.47],[.56,.54],[.63,.60],[.67,.67]],.045,10,7),
       shell([.18,.18],[.32,.32],0,.4,3,21,2)]),
-    'space-weic2615a': score('Centaurus A warped disk around a radiating core', .10, [
+    'space-weic2615a': score('Centaurus A warped disk draining into its core', .10, [
       ring([.49,.52],[.42,.20],-.10,.30,7,20),
       stream([[.12,.62],[.32,.56],[.49,.50],[.66,.45],[.88,.40]],.06,8,13,1),
-      spiral([.49,.50],[.05,.12],0,.9,8,8,2,2.2)]),
+      spiral([.49,.50],[.025,.06],0,1.2,8,8,2,2.2)]),
     // Planets. Bands, storms and rings each keep their own motion.
     'space-heic1708a': score('Jupiter counter-flowing zonal jets and Great Red Spot', .02, [
       stream([[.16,.30],[.50,.28],[.84,.30]],.025,6,11),
@@ -364,6 +364,7 @@
     const wave = new Float32Array(n).fill(150), surge = new Float32Array(n).fill(2);
     const spot = new Float32Array(2);
     const flowX = new Float32Array(n), flowY = new Float32Array(n);
+    const swallow = new Float32Array(n), dragX = new Float32Array(n), dragY = new Float32Array(n);
 
     const fields = profile.layers.map((layer, index) => {
       const values = new Float32Array(n * 4);
@@ -373,7 +374,7 @@
       });
       const total = segments?.reduce((sum, s) => sum + s.length, 0);
       const ca = Math.cos(layer.tilt || 0), sa = Math.sin(layer.tilt || 0);
-      const heading = layer.seconds < 0 ? -1 : 1, period = Math.abs(layer.seconds);
+      const heading = layer.type === 'spiral' ? 1 : layer.seconds < 0 ? -1 : 1, period = Math.abs(layer.seconds);
       const kind = KIND[layer.type];
       // Size of the structure on screen, and the speed its own period gives it.
       const edge = !photo ? null : layer.traced ? outline(photo, layer.center) : layer.glow ? spread(photo, layer.center) : null;
@@ -381,7 +382,7 @@
         ? segments.reduce((sum, g) => sum + Math.hypot(g.dx * sxp, g.dy * syp), 0)
         : edge ? edge.mean * sxp
         : Math.sqrt(((layer.radius[0] * sxp) ** 2 + (layer.radius[1] * syp) ** 2) / 2);
-      let speed = kind === 1 ? span / period : kind === 2 ? Math.PI * 2 * span / period * .55 : kind === 4 ? span * 3.2 / period : span / period * 1.6;
+      let speed = kind === 1 ? span / period : kind === 2 ? Math.PI * 2 * span / period * .55 : kind === 4 ? span * 2.4 / period : span / period * 1.6;
       speed = Math.max(14, Math.min(120, speed)) * .45;
 
       for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
@@ -419,21 +420,34 @@
           strip = Math.round(angle * span * (edge.rim ? 1 : .5) / LANE);
           travelled = radius * span;
         } else if (kind === 4) {
-          // Spiral: each lane is one logarithmic arm (constant angle minus
-          // wind times log radius). Symbols ride the arm out of the horizon,
-          // brightest just outside it and fading as they escape.
+          // Infall: each lane is one logarithmic arm. Symbols ride it inward,
+          // speeding up as they near the horizon (distance along the lane goes
+          // as radius squared, so a steady pace means a quickening fall), and
+          // vanish once they cross it (see swallow below).
           const x = nx - layer.center[0], y = ny - layer.center[1];
           const ex = (x*ca + y*sa)/layer.radius[0], ey = (-x*sa + y*ca)/layer.radius[1];
           const radius = Math.max(.04, Math.hypot(ex, ey)), angle = Math.atan2(ey, ex);
-          const log = Math.log(radius), wind = layer.wind;
-          let arm = (angle - wind * log) % (Math.PI * 2); if (arm < 0) arm += Math.PI * 2;
-          distance = radius < 1 ? (1 - radius) * 1.6 : (radius - 1) * .3;
-          progress = log * .65 + arm * .08;
-          const tx = (Math.cos(angle) - wind * Math.sin(angle)) * layer.radius[0];
-          const ty = (Math.sin(angle) + wind * Math.cos(angle)) * layer.radius[1];
+          const wind = layer.wind;
+          let arm = (angle - wind * Math.log(radius)) % (Math.PI * 2); if (arm < 0) arm += Math.PI * 2;
+          distance = radius < 1 ? 0 : (radius - 1) * .22;
+          progress = radius * .65 + arm * .08;
+          // Inward along the arm: minus the radial direction, plus the swirl.
+          const tx = (-Math.cos(angle) - wind * Math.sin(angle)) * layer.radius[0];
+          const ty = (-Math.sin(angle) + wind * Math.cos(angle)) * layer.radius[1];
           vx = tx*ca - ty*sa; vy = tx*sa + ty*ca;
           strip = Math.round(arm * span * 1.4 / LANE);
-          travelled = log * span * Math.hypot(1, wind);
+          travelled = -radius * radius * span * .6;
+          gait = Math.min(2.4, 1 / Math.max(.45, radius));
+          const gone = Math.max(0, Math.min(1, (1.05 - radius) / .25));
+          if (gone > swallow[r*cols+c]) swallow[r*cols+c] = gone * gone * (3 - 2 * gone);
+          // Lensing: the photograph is sampled from further out and a little
+          // around, so the picture itself looks pulled in and twisted near the hole.
+          if (radius >= .9) {
+            const pullPx = Math.min(16, layer.amount * 1.6 / (radius * radius));
+            const rx = Math.cos(angle) * layer.radius[0], ry = Math.sin(angle) * layer.radius[1];
+            const ox = (rx*ca - ry*sa) * sxp, oy = (rx*sa + ry*ca) * syp, ol = Math.hypot(ox, oy) || 1;
+            dragX[r*cols+c] += (ox/ol + -oy/ol * .6) * pullPx; dragY[r*cols+c] += (oy/ol + ox/ol * .6) * pullPx;
+          }
         } else {
           const x = nx - layer.center[0], y = ny - layer.center[1];
           const ex = (x*ca + y*sa)/layer.radius[0], ey = (-x*sa + y*ca)/layer.radius[1];
@@ -474,14 +488,14 @@
           claim[i] = bid;
           const id = index * 8192 + strip + 4096;
           // Neighbouring lanes never move at quite the same speed.
-          const own = kind >= 3 ? 1 : .75 + .5 * hash2(id, 71);
-          lane[i] = id; along[i] = travelled; kindOf[i] = kind === 4 ? 3 : kind;
+          const own = kind === 3 ? 1 : .75 + .5 * hash2(id, 71);
+          lane[i] = id; along[i] = travelled; kindOf[i] = kind === 4 ? 1 : kind;
           // Nothing stands still: even the furthest cell keeps a slow walk.
           pace[i] = heading * Math.max(5.5, speed * gait * own * (.45 + .55 * hold));
           reach[i] = (1.5 + layer.amount * .55) * (.45 + .55 * hold);
           pull[i] = envelope; turn[i] = layer.phase;
           // A traced shell sends two or three slow fronts across its own radius.
-          wave[i] = edge ? span / (edge.rim ? 2.4 : 3) : kind === 4 ? span * .9 : 150; surge[i] = edge ? 1.1 : kind === 4 ? 1.4 : 2;
+          wave[i] = edge ? span / (edge.rim ? 2.4 : 3) : 150; surge[i] = edge ? 1.1 : 2;
           flowX[i] = vx / length * pace[i] / .45; flowY[i] = vy / length * pace[i] / .45;
         }
       }
@@ -549,7 +563,7 @@
 
     return {
       name: profile.name, stars: profile.stars,
-      dye, pace, pull, kindOf, flow, step, inject,
+      dye, pace, pull, kindOf, flow, step, inject, swallow,
       sample(i, time, out) {
         let x = 0, y = 0, energy = 0, weight = 0;
         const at = i*4;
@@ -563,7 +577,7 @@
           energy += e * Math.max(0, along)**4; weight += e;
         }
         const bound = Math.max(1, Math.hypot(x, y)/12);
-        out[0] = x/bound; out[1] = y/bound;
+        out[0] = x/bound + dragX[i]; out[1] = y/bound + dragY[i];
         out[2] = 1 + .13 * energy/Math.max(1, weight);
       }
     };

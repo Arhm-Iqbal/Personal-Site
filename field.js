@@ -349,6 +349,9 @@
         // Local star protection keeps their real photographic profiles intact.
         const base = (Math.min(sh - 1, Math.floor(y * ky)) * sw + Math.min(sw - 1, Math.floor(x * kx))) * 4;
         const anchorL = (.2126 * data[base] + .7152 * data[base+1] + .0722 * data[base+2]) / 255;
+        // Past a black hole's event horizon nothing is drawn at all.
+        const gone = field.swallow ? field.swallow[i] : 0;
+        if (gone >= .98) continue;
         const present = clamp((peak[i] - floor - .01) / .05);
         if (present <= 0 && dyed < .04) {
           // Empty sky still belongs to a lane. It carries light, sparse symbols:
@@ -392,9 +395,9 @@
           char = Math.abs(dx) > Math.abs(dy) * 2 ? '|' : Math.abs(dy) > Math.abs(dx) * 2 ? '\u2014' : dx * dy > 0 ? '\\' : '/';
         }
         const visibility = Math.max(present, clamp(dyed * 1.5));
-        mg.globalAlpha = clamp((.45 + tone * .55) * visibility * (1 - protection * .7));
+        mg.globalAlpha = clamp((.45 + tone * .55) * visibility * (1 - protection * .7) * (1 - gone));
         mg.fillText(char, x, y);
-        if (heat > .08) hot.push(char, x, y, heat * .6);
+        if (heat > .08) hot.push(char, x, y, heat * .6 * (1 - gone));
       }
     }
     mg.globalAlpha = 1;
