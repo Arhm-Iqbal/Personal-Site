@@ -12,7 +12,7 @@
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/ibm-plex-mono-400.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="styles.css?v=20261114-pommel">
+<link rel="stylesheet" href="styles.css?v=20261114-egg">
 </head>
 <body>
 <a class="skip-link" href="#content">Skip to content</a>
@@ -357,6 +357,7 @@
       <li><img src="books/you-and-me-and-her.jpg" alt="" width="300" height="450" loading="lazy" decoding="async"><h4>You and Me and Her: A Love Story</h4><p>Nitroplus</p></li>
       <li><img src="books/steins-gate.jpg" alt="" width="300" height="429" loading="lazy" decoding="async"><h4>Steins;Gate</h4><p>5pb. and Nitroplus</p></li>
     </ul>
+    <p class="whisper">(the code is 99942)</p>
   </section>
 
   <section id="contact" class="block close">
@@ -371,7 +372,20 @@
     <p class="plain credit">Space photography from <a href="https://esahubble.org/">NASA / ESA / Hubble</a>. <a href="credits.html">Image credits</a>.</p>
   </section>
 
+  <p class="egg-door"><button type="button" id="egg-open">enter code</button></p>
+
 </main>
+
+<div class="egg" id="egg" hidden>
+  <div class="egg-box" role="dialog" aria-modal="true" aria-label="Enter code">
+    <button type="button" class="egg-x" aria-label="Close">&times;</button>
+    <form class="egg-form">
+      <p class="egg-hint">Don't know the code? Look around maybe you'll find it...</p>
+      <input type="text" inputmode="numeric" autocomplete="off" spellcheck="false" aria-label="Code">
+    </form>
+    <img class="egg-img" alt="" hidden>
+  </div>
+</div>
 
 <script src="space-images.js" defer></script>
 <script src="space-motion.js" defer></script>
@@ -379,6 +393,7 @@
 <script src="fullscreen.js" defer></script>
 <script src="sound.js" defer></script>
 <script src="cursor.js" defer></script>
+<script src="egg.js" defer></script>
 <script src="mobile-panels.js?v=20261114-return" defer></script>
 </body>
 </html>
