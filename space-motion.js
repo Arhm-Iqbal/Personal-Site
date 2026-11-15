@@ -367,7 +367,7 @@
     const swallow = new Float32Array(n), dragX = new Float32Array(n), dragY = new Float32Array(n);
     // Spaghettification: how hard a symbol is being stretched, along which
     // screen direction (towards the hole), and how far the lens has pulled it in.
-    const strain = new Float32Array(n), axis = new Float32Array(n), sinkX = new Float32Array(n), sinkY = new Float32Array(n);
+    const strain = new Float32Array(n), axis = new Float32Array(n), axisC = new Float32Array(n), axisS = new Float32Array(n), sinkX = new Float32Array(n), sinkY = new Float32Array(n);
 
     const fields = profile.layers.map((layer, index) => {
       const values = new Float32Array(n * 4);
@@ -448,7 +448,7 @@
             if (pull > strain[k]) {
               const rx = Math.cos(angle) * layer.radius[0], ry = Math.sin(angle) * layer.radius[1];
               const ox = (rx*ca - ry*sa) * sxp, oy = (rx*sa + ry*ca) * syp, ol = Math.hypot(ox, oy) || 1;
-              strain[k] = pull; axis[k] = Math.atan2(oy, ox);
+              strain[k] = pull; axis[k] = Math.atan2(oy, ox); axisC[k] = ox / ol; axisS[k] = oy / ol;
               // Fisheye: symbols bunch in towards the horizon, most strongly at its edge.
               const sink = Math.min(radius - .9, .5) * ol * pull * .45;
               sinkX[k] = -ox / ol * sink; sinkY[k] = -oy / ol * sink;
@@ -577,7 +577,7 @@
 
     return {
       name: profile.name, stars: profile.stars,
-      dye, pace, pull, kindOf, flow, step, inject, swallow, strain, axis, sinkX, sinkY,
+      dye, pace, pull, kindOf, flow, step, inject, swallow, strain, axis, axisC, axisS, sinkX, sinkY,
       sample(i, time, out) {
         let x = 0, y = 0, energy = 0, weight = 0;
         const at = i*4;
