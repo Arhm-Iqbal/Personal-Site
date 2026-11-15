@@ -50,7 +50,7 @@ ul { padding: 0; list-style: none; }
   content: ""; position: absolute; inset: 0; pointer-events: none;
   background: linear-gradient(180deg, rgb(7 9 13 / .72) 0%, transparent 33%, transparent 64%, var(--ground) 100%);
 }
-#field { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: pan-y; cursor: crosshair; }
+#field { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: pan-y; }
 .mast { position: relative; z-index: 1; padding: clamp(28px, 4vw, 56px) var(--gutter) 0; pointer-events: none; }
 .fullscreen-button, .sound-button {
   position: absolute; z-index: 3; top: clamp(24px, 4vw, 52px); right: var(--gutter);
@@ -197,30 +197,20 @@ html.home body { height: 100%; overflow: hidden; overscroll-behavior: none; }
   .group { margin-top: 40px; }
   .shelf { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 18px; }
 }
-/* Custom cursor (mouse only; added by cursor.js once a mouse moves). The dot
-   sits on the pointer; the ring trails it, opens over links and buttons, and
-   tightens into a small reticle over the artwork. Difference blending keeps
-   both visible on bright nebulae and on the dark pages alike. */
-.cursor-dot, .cursor-ring {
-  position: fixed; top: 0; left: 0; z-index: 2147483000; pointer-events: none;
-  border-radius: 50%; mix-blend-mode: difference; opacity: 0; will-change: transform;
+/* Cursor: a small dithered twin-pronged spear, drawn by the system so it never
+   lags or jumps. The point is the hotspot. Mouse devices only; touch is untouched. */
+@media (hover: hover) and (pointer: fine) {
+  html, #field {
+    cursor: url("assets/cursor/spear.png") 1 1, auto;
+    cursor: -webkit-image-set(url("assets/cursor/spear.png") 1x, url("assets/cursor/spear@2x.png") 2x) 1 1, auto;
+    cursor: image-set(url("assets/cursor/spear.png") 1x, url("assets/cursor/spear@2x.png") 2x) 1 1, auto;
+  }
+  a, button, [role="button"], label, summary, select, .fullscreen-button, .sound-button, .mobile-back {
+    cursor: url("assets/cursor/spear-hover.png") 1 1, pointer;
+    cursor: -webkit-image-set(url("assets/cursor/spear-hover.png") 1x, url("assets/cursor/spear-hover@2x.png") 2x) 1 1, pointer;
+    cursor: image-set(url("assets/cursor/spear-hover.png") 1x, url("assets/cursor/spear-hover@2x.png") 2x) 1 1, pointer;
+  }
 }
-.cursor-dot { width: 6px; height: 6px; margin: -3px 0 0 -3px; background: #fff; }
-.cursor-ring { width: 30px; height: 30px; margin: -15px 0 0 -15px; }
-.cursor-ring::before {
-  content: ""; position: absolute; inset: 0; border: 1px solid rgb(255 255 255 / .7); border-radius: 50%;
-  transition: transform 260ms cubic-bezier(.22, 1, .36, 1), border-color 200ms, background 200ms;
-}
-.cursor-dot { transition: opacity 200ms, scale 200ms cubic-bezier(.22, 1, .36, 1); }
-.cursor-ring { transition: opacity 200ms; }
-html.has-cursor .cursor-dot, html.has-cursor .cursor-ring { opacity: 1; }
-html.has-cursor, html.has-cursor * { cursor: none !important; }
-html.cursor-hover .cursor-ring::before { transform: scale(1.55); background: rgb(255 255 255 / .1); border-color: rgb(255 255 255 / .9); }
-html.cursor-hover .cursor-dot { scale: 0; }
-html.cursor-art .cursor-ring::before { transform: scale(.72); }
-html.cursor-down .cursor-ring::before { transform: scale(.55); }
-html.cursor-hover.cursor-down .cursor-ring::before { transform: scale(1.25); }
-html.cursor-away .cursor-dot, html.cursor-away .cursor-ring { opacity: 0; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
