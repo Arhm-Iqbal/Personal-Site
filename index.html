@@ -12,9 +12,14 @@
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/ibm-plex-mono-400.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="styles.css?v=20261115-eggf">
+<link rel="stylesheet" href="styles.css?v=20261119-sections">
 </head>
 <body>
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-github" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></symbol>
+  <symbol id="i-out" viewBox="0 0 16 16"><path d="M5.5 3.5h7v7M12.5 3.5l-9 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-star" viewBox="0 0 12 12"><path d="M6 0l1.05 4.95L12 6 7.05 7.05 6 12 4.95 7.05 0 6l4.95-1.05z"/></symbol>
+</svg>
 <a class="skip-link" href="#content">Skip to content</a>
 
 <header class="sky" id="top">
@@ -71,149 +76,239 @@
 
   <section id="work" class="block">
     <h2>Work</h2>
-    <ul class="rows">
-      <li id="simuprep">
-        <span class="when">2025–present</span>
-        <div>
+    <ul class="projects">
+      <li class="project" id="simuprep">
+        <a class="cover" href="https://simuprep-product.vercel.app" tabindex="-1" aria-hidden="true">
+          <img src="assets/work/simuprep.jpg" alt="" width="1280" height="800" loading="lazy" decoding="async">
+        </a>
+        <div class="project-head">
           <h3>SimuPrep</h3>
-          <p>Co-founded a platform for clinical simulation preparation, now being licensed by NAIT. The project won first place and $5,000 at natHacks 2025. Exhibited SimuPrep in the ALPHA startup program at Web Summit Vancouver.</p>
+          <span class="when">2025–present</span>
         </div>
+        <p class="honour"><svg aria-hidden="true"><use href="#i-star"/></svg>First place and $5,000, natHacks 2025</p>
+        <p class="about">Co-founded a platform for clinical simulation preparation, now being licensed by NAIT. Exhibited SimuPrep in the ALPHA startup program at Web Summit Vancouver.</p>
+        <ul class="stack" aria-label="Built with"><li>Node.js</li><li>Express</li><li>Supabase</li><li>OpenAI</li></ul>
+        <p class="project-links">
+          <a href="https://simuprep-product.vercel.app"><svg aria-hidden="true"><use href="#i-out"/></svg>Website</a>
+        </p>
       </li>
-      <li id="wifi">
-        <span class="when">2026–present</span>
-        <div>
+      <li class="project" id="wifi">
+        <div class="cover">
+          <canvas class="glyph-cover" data-cover="breath" aria-hidden="true"></canvas>
+          <span class="cover-note">Illustration: breathing, read from Wi-Fi signal</span>
+        </div>
+        <div class="project-head">
           <h3>Wi-Fi Biosensing</h3>
-          <p>Leading a project with the Undergraduate Artificial Intelligence Society to investigate respiration, movement, and sleep monitoring through Wi-Fi signals. Uses ESP32 boards, signal processing, and machine learning to explore sensing without wearables.</p>
+          <span class="when">2026–present</span>
         </div>
+        <p class="honour"><svg aria-hidden="true"><use href="#i-star"/></svg>Project lead, Undergraduate Artificial Intelligence Society</p>
+        <p class="about">Investigating respiration, movement, and sleep monitoring through Wi-Fi signals. Uses ESP32 boards, signal processing, and machine learning to explore sensing without wearables.</p>
+        <ul class="stack" aria-label="Built with"><li>ESP32</li><li>Signal processing</li><li>Machine learning</li></ul>
       </li>
-      <li id="auditor">
-        <span class="when">2026</span>
-        <div>
+      <li class="project" id="auditor">
+        <a class="cover" href="https://github.com/Arhm-Iqbal/evidence-poverty-auditor" tabindex="-1" aria-hidden="true">
+          <img src="assets/work/evidence-poverty-auditor.jpg" alt="" width="1160" height="725" loading="lazy" decoding="async">
+        </a>
+        <div class="project-head">
           <h3>Evidence Poverty Auditor</h3>
-          <p>Built a biomedical knowledge-graph pipeline to examine evidence gaps in AI drug-discovery models for neglected tropical diseases. Won the RBC Poster Competition at the STEM Fellowship Inter-University Big Data Challenge. <a href="https://github.com/Arhm-Iqbal/evidence-poverty-auditor">Code</a></p>
+          <span class="when">2026</span>
         </div>
+        <p class="honour"><svg aria-hidden="true"><use href="#i-star"/></svg>Won the RBC Poster Competition, STEM Fellowship Inter-University Big Data Challenge</p>
+        <p class="about">Built a biomedical knowledge-graph pipeline to examine evidence gaps in AI drug-discovery models for neglected tropical diseases.</p>
+        <ul class="stack" aria-label="Built with"><li>Python</li><li>PyKEEN</li><li>Knowledge graphs</li><li>Open Targets</li></ul>
+        <p class="project-links">
+          <a href="https://github.com/Arhm-Iqbal/evidence-poverty-auditor"><svg class="fill" aria-hidden="true"><use href="#i-github"/></svg>Code</a>
+        </p>
       </li>
-      <li id="nathacks26">
-        <span class="when">2026</span>
-        <div>
+      <li class="project" id="nathacks26">
+        <div class="cover">
+          <canvas class="glyph-cover" data-cover="gait" aria-hidden="true"></canvas>
+          <span class="cover-note">Illustration: hip, knee and ankle angles over a stride</span>
+        </div>
+        <div class="project-head">
           <h3>Phone-based motion tracking</h3>
-          <p>Developed a system that uses two phones and a transformer model to estimate hip, knee, and ankle angles for rehabilitation monitoring outside the lab. Second place, Problem Provider Division, natHacks 2026. <a href="https://github.com/Arhm-Iqbal/phone-recorder">Recorder code</a></p>
+          <span class="when">2026</span>
         </div>
+        <p class="honour"><svg aria-hidden="true"><use href="#i-star"/></svg>Second place, Problem Provider Division, natHacks 2026</p>
+        <p class="about">Developed a system that uses two phones and a transformer model to estimate hip, knee, and ankle angles for rehabilitation monitoring outside the lab.</p>
+        <ul class="stack" aria-label="Built with"><li>Node.js</li><li>WebSockets</li><li>PyTorch</li><li>Transformers</li></ul>
+        <p class="project-links">
+          <a href="https://github.com/Arhm-Iqbal/phone-recorder"><svg class="fill" aria-hidden="true"><use href="#i-github"/></svg>Recorder code</a>
+        </p>
       </li>
-      <li id="basirah">
-        <span class="when">2026</span>
-        <div>
+      <li class="project" id="basirah">
+        <a class="cover" href="https://basirah-hazel.vercel.app" tabindex="-1" aria-hidden="true">
+          <img src="assets/work/basirah.jpg" alt="" width="1280" height="800" loading="lazy" decoding="async">
+        </a>
+        <div class="project-head">
           <h3>Basirah</h3>
-          <p>Built a platform for incident reporting and community support for Muslims facing hate in Canada, with a focus on privacy. Developed at The Harvest Anti-Muslim Hate Hackathon. <a href="https://basirah-hazel.vercel.app">Live app</a> and <a href="https://github.com/Arhm-Iqbal/Basirah">code</a></p>
+          <span class="when">2026</span>
         </div>
+        <p class="about">Built a platform for incident reporting and community support for Muslims facing hate in Canada, with a focus on privacy. Developed at The Harvest Anti-Muslim Hate Hackathon.</p>
+        <ul class="stack" aria-label="Built with"><li>Next.js</li><li>Hono</li><li>Supabase</li><li>PostGIS</li><li>MapLibre</li></ul>
+        <p class="project-links">
+          <a href="https://basirah-hazel.vercel.app"><svg aria-hidden="true"><use href="#i-out"/></svg>Live app</a>
+          <a href="https://github.com/Arhm-Iqbal/Basirah"><svg class="fill" aria-hidden="true"><use href="#i-github"/></svg>Code</a>
+        </p>
       </li>
-      <li id="grantpath">
-        <span class="when">2026</span>
-        <div>
+      <li class="project" id="grantpath">
+        <div class="cover">
+          <canvas class="glyph-cover" data-cover="path" aria-hidden="true"></canvas>
+          <span class="cover-note">Illustration: one route through the paperwork</span>
+        </div>
+        <div class="project-head">
           <h3>GrantPath</h3>
-          <p>Developed a tool to guide students through disability-related funding applications. Second place and $3,000 in prizes at natIgnite 2026.</p>
+          <span class="when">2026</span>
         </div>
+        <p class="honour"><svg aria-hidden="true"><use href="#i-star"/></svg>Second place and $3,000 in prizes, natIgnite 2026</p>
+        <p class="about">Developed a tool to guide students through disability-related funding applications.</p>
       </li>
-      <li id="vibe">
-        <span class="when">2025</span>
-        <div>
+      <li class="project" id="vibe">
+        <a class="cover" href="https://devpost.com/software/vibe-maxxing" tabindex="-1" aria-hidden="true">
+          <img src="assets/work/vibe-maxxing.jpg" alt="" width="1280" height="800" loading="lazy" decoding="async">
+        </a>
+        <div class="project-head">
           <h3>Vibe-Maxxing</h3>
-          <p>Computer vision project that won first place at the UAIS Sillycon Hackathon. <a href="https://devpost.com/software/vibe-maxxing">Devpost</a></p>
+          <span class="when">2025</span>
         </div>
+        <p class="honour"><svg aria-hidden="true"><use href="#i-star"/></svg>First place, UAIS Sillycon Hackathon</p>
+        <p class="about">A computer vision system that tracks hand landmarks through a webcam and turns movement into live control signals for a visual engine.</p>
+        <ul class="stack" aria-label="Built with"><li>Python</li><li>MediaPipe</li><li>TouchDesigner</li></ul>
+        <p class="project-links">
+          <a href="https://devpost.com/software/vibe-maxxing"><svg aria-hidden="true"><use href="#i-out"/></svg>Devpost</a>
+          <a href="https://github.com/Arhm-Iqbal/Vibe-Maxxing"><svg class="fill" aria-hidden="true"><use href="#i-github"/></svg>Code</a>
+        </p>
       </li>
-      <li id="arena">
-        <span class="when">2025</span>
-        <div>
-          <h3>Drosophila temperature-control system</h3>
-          <p>Built the control software and thermal hardware for a Raspberry Pi system used in Drosophila memory-suppression experiments. The system controls temperature to activate or inhibit temperature-sensitive neural circuits.</p>
+      <li class="project" id="arena">
+        <div class="cover">
+          <canvas class="glyph-cover" data-cover="heat" aria-hidden="true"></canvas>
+          <span class="cover-note">Illustration: a programmed temperature cycle</span>
         </div>
+        <div class="project-head">
+          <h3>Drosophila temperature-control system</h3>
+          <span class="when">2025</span>
+        </div>
+        <p class="about">Built the control software and thermal hardware for a Raspberry Pi system used in Drosophila memory-suppression experiments. The system controls temperature to activate or inhibit temperature-sensitive neural circuits.</p>
+        <ul class="stack" aria-label="Built with"><li>Raspberry Pi</li><li>Control software</li><li>Thermal hardware</li></ul>
       </li>
     </ul>
+
+    <div class="activity" id="activity">
+      <div class="activity-head">
+        <h3>GitHub activity</h3>
+        <a href="https://github.com/Arhm-Iqbal"><svg class="fill" aria-hidden="true"><use href="#i-github"/></svg>Arhm-Iqbal</a>
+      </div>
+      <figure class="activity-sky">
+        <div class="activity-scroll">
+          <div class="activity-plot">
+            <div class="activity-months" aria-hidden="true"></div>
+            <div class="activity-days" aria-hidden="true"><span></span><span>Mon</span><span></span><span>Wed</span><span></span><span>Fri</span><span></span></div>
+            <svg class="activity-graph" role="img" aria-label="GitHub contributions over the last year"></svg>
+            <p class="activity-tip" hidden></p>
+          </div>
+        </div>
+        <figcaption class="activity-foot">
+          <p class="activity-stats"></p>
+          <p class="activity-key" aria-hidden="true">Less <svg viewBox="0 0 92 16"></svg> More</p>
+        </figcaption>
+      </figure>
+    </div>
   </section>
 
   <section id="resume" class="block">
     <h2>Resume</h2>
 
-    <h3 class="group">Education</h3>
-    <ul class="rows">
-      <li><span class="when">2024–present</span><div><h4>University of Alberta</h4><p>BSc in Honours Neuroscience, third year. Edmonton, Alberta.</p></div></li>
-    </ul>
+    <div class="resume-layout">
+      <figure class="trajectory" aria-hidden="true">
+        <svg class="trajectory-chart"></svg>
+        <figcaption class="trajectory-note"></figcaption>
+      </figure>
 
-    <h3 class="group">Research</h3>
-    <ul class="rows">
-      <li id="neurosurgery">
-        <span class="when">2026</span>
-        <div><h4>Division of Neurosurgery, University of Alberta</h4>
-        <p>Research student with Dr. Tim Darsaut. Contributed to the TATAM2 trial protocol, manuscripts, electronic case report forms, and consent documents. Supported the ongoing RISE, TOBAS, and CAM neurovascular trials.</p></div>
-      </li>
-      <li id="yue">
-        <span class="when">2026</span>
-        <div><h4>Faculty of Medicine and Dentistry, University of Alberta</h4>
-        <p>URI-funded summer research intern with Dr. Jessica Yue. Conducted in vivo and in vitro research involving western blots, dissections, clamp experiments, and metabolic cage studies. Presented the project at FoMD Day.</p></div>
-      </li>
-      <li>
-        <span class="when">2025</span>
-        <div><h4>Department of Biological Sciences, University of Alberta</h4>
-        <p>Undergraduate research assistant with Dr. Anna Phan. Developed a programmable temperature-control system for Drosophila memory-suppression experiments, integrating Raspberry Pi software and thermal hardware.</p></div>
-      </li>
-      <li id="yue-volunteer">
-        <span class="when">2025</span>
-        <div><h4>Faculty of Medicine and Dentistry, University of Alberta</h4>
-        <p>Research volunteer with Dr. Jessica Yue. Prepared western blots, reagents, and samples for studies of neural regulation of nutrient sensing.</p></div>
-      </li>
-    </ul>
+      <div class="resume-entries">
+        <h3 class="group" data-track="education">Education</h3>
+        <ul class="rows" data-track="education" data-label="Education">
+          <li id="ualberta" data-from="2024" data-to="now"><span class="when">2024–present</span><div><h4>University of Alberta</h4><p>BSc in Honours Neuroscience, third year. Edmonton, Alberta.</p></div></li>
+        </ul>
 
-    <h3 class="group">Presentations</h3>
-    <ul class="rows">
-      <li><span class="when">2026</span><div><h4>IUBDC, University of Calgary</h4><p>Oral and poster presentations of the Evidence Poverty Auditor, later developed into a research manuscript.</p></div></li>
-      <li><span class="when">2026</span><div><h4>FoMD Day, University of Alberta</h4><p>Presented a poster on research conducted in Dr. Jessica Yue’s lab.</p></div></li>
-      <li id="cucoh">
-        <span class="when">2025</span>
-        <div><h4>Canadian Undergraduate Conference on Healthcare, Queen's University</h4>
-        <p>Selected for an oral presentation of research from Dr. Anna Phan’s lab. Submitted the abstract to the URNCST Journal.</p></div>
-      </li>
-      <li><span class="when">2025</span><div><h4>RE Peter, University of Alberta</h4><p>Presented a poster on research conducted in Dr. Anna Phan’s lab.</p></div></li>
-    </ul>
+        <h3 class="group" data-track="research">Research</h3>
+        <ul class="rows" data-track="research" data-label="Research">
+          <li id="neurosurgery" data-from="2026" data-to="2026">
+            <span class="when">2026</span>
+            <div><h4>Division of Neurosurgery, University of Alberta</h4>
+            <p>Research student with Dr. Tim Darsaut. Contributed to the TATAM2 trial protocol, manuscripts, electronic case report forms, and consent documents. Supported the ongoing RISE, TOBAS, and CAM neurovascular trials.</p></div>
+          </li>
+          <li id="yue" data-from="2026" data-to="2026">
+            <span class="when">2026</span>
+            <div><h4>Faculty of Medicine and Dentistry, University of Alberta</h4>
+            <p>URI-funded summer research intern with Dr. Jessica Yue. Conducted in vivo and in vitro research involving western blots, dissections, clamp experiments, and metabolic cage studies. Presented the project at FoMD Day.</p></div>
+          </li>
+          <li id="phan" data-from="2025" data-to="2025">
+            <span class="when">2025</span>
+            <div><h4>Department of Biological Sciences, University of Alberta</h4>
+            <p>Undergraduate research assistant with Dr. Anna Phan. Developed a programmable temperature-control system for Drosophila memory-suppression experiments, integrating Raspberry Pi software and thermal hardware.</p></div>
+          </li>
+          <li id="yue-volunteer" data-from="2025" data-to="2025">
+            <span class="when">2025</span>
+            <div><h4>Faculty of Medicine and Dentistry, University of Alberta</h4>
+            <p>Research volunteer with Dr. Jessica Yue. Prepared western blots, reagents, and samples for studies of neural regulation of nutrient sensing.</p></div>
+          </li>
+        </ul>
 
-    <h3 class="group">Experience</h3>
-    <ul class="rows">
-      <li id="nait">
-        <span class="when">2025–present</span><div><h4>Software Engineer, NAIT</h4><p>Part-time contract.</p></div>
-      </li>
-      <li><span class="when">2025–present</span><div><h4>Technical Co-Founder, SimuPrep</h4><p>Co-founded a clinical simulation preparation platform, now being licensed by NAIT.</p></div></li>
-      <li><span class="when">2025</span><div><h4>Sales Associate, SoftMoc</h4><p>Sherwood Park, Alberta.</p></div></li>
-      <li id="vet">
-        <span class="when">2022–2025</span><div><h4>Veterinary Assistant and Receptionist, Gibbons Veterinary Clinic</h4><p>Gibbons, Alberta.</p></div>
-      </li>
-    </ul>
+        <h3 class="group" data-track="talks">Presentations</h3>
+        <ul class="rows" data-track="talks" data-label="Presentations">
+          <li id="iubdc" data-from="2026"><span class="when">2026</span><div><h4>IUBDC, University of Calgary</h4><p>Oral and poster presentations of the Evidence Poverty Auditor, later developed into a research manuscript.</p></div></li>
+          <li id="fomd" data-from="2026"><span class="when">2026</span><div><h4>FoMD Day, University of Alberta</h4><p>Presented a poster on research conducted in Dr. Jessica Yue’s lab.</p></div></li>
+          <li id="cucoh" data-from="2025">
+            <span class="when">2025</span>
+            <div><h4>Canadian Undergraduate Conference on Healthcare, Queen's University</h4>
+            <p>Selected for an oral presentation of research from Dr. Anna Phan’s lab. Submitted the abstract to the URNCST Journal.</p></div>
+          </li>
+          <li id="re-peter" data-from="2025"><span class="when">2025</span><div><h4>RE Peter, University of Alberta</h4><p>Presented a poster on research conducted in Dr. Anna Phan’s lab.</p></div></li>
+        </ul>
 
-    <h3 class="group">Leadership and service</h3>
-    <ul class="rows">
-      <li id="usig">
-        <span class="when">2025–present</span><div><h4>Founder, Undergraduate Surgery Interest Group</h4><p>Student club at the University of Alberta.</p></div>
-      </li>
-      <li><span class="when">2026–present</span><div><h4>AI Career Accelerator, Amii</h4></div></li>
-      <li id="nextgen">
-        <span class="when">2026</span><div><h4>Youth Member, Strathcona County NextGen</h4><p>Led Young Artists in Motion, a public art exhibition on buses featuring work by local youth. Developing an online gallery for youth art in the community.</p></div>
-      </li>
-      <li id="mfr">
-        <span class="when">2025–present</span><div><h4>Medical First Responder, St. John Ambulance</h4></div>
-      </li>
-      <li id="steadward">
-        <span class="when">2024–present</span><div><h4>Volunteer, Steadward Centre for Personal and Physical Achievement</h4><p>Supported fitness and mobility programs for people with physical and neurological disabilities.</p></div>
-      </li>
-    </ul>
+        <h3 class="group" data-track="work">Experience</h3>
+        <ul class="rows" data-track="work" data-label="Experience">
+          <li id="nait" data-from="2025" data-to="now">
+            <span class="when">2025–present</span><div><h4>Software Engineer, NAIT</h4><p>Part-time contract.</p></div>
+          </li>
+          <li id="cofounder" data-from="2025" data-to="now"><span class="when">2025–present</span><div><h4>Technical Co-Founder, SimuPrep</h4><p>Co-founded a clinical simulation preparation platform, now being licensed by NAIT.</p></div></li>
+          <li id="softmoc" data-from="2025" data-to="2025"><span class="when">2025</span><div><h4>Sales Associate, SoftMoc</h4><p>Sherwood Park, Alberta.</p></div></li>
+          <li id="vet" data-from="2022" data-to="2025">
+            <span class="when">2022–2025</span><div><h4>Veterinary Assistant and Receptionist, Gibbons Veterinary Clinic</h4><p>Gibbons, Alberta.</p></div>
+          </li>
+        </ul>
 
-    <h3 class="group">Skills</h3>
-    <p class="plain">Python, C, MATLAB, full-stack development, API integration, microcontrollers, machine learning, deep learning, Git, and Azure DevOps.</p>
+        <h3 class="group" data-track="service">Leadership and service</h3>
+        <ul class="rows" data-track="service" data-label="Leadership">
+          <li id="usig" data-from="2025" data-to="now">
+            <span class="when">2025–present</span><div><h4>Founder, Undergraduate Surgery Interest Group</h4><p>Student club at the University of Alberta.</p></div>
+          </li>
+          <li id="amii" data-from="2026" data-to="now"><span class="when">2026–present</span><div><h4>AI Career Accelerator, Amii</h4></div></li>
+          <li id="nextgen" data-from="2026" data-to="2026">
+            <span class="when">2026</span><div><h4>Youth Member, Strathcona County NextGen</h4><p>Led Young Artists in Motion, a public art exhibition on buses featuring work by local youth. Developing an online gallery for youth art in the community.</p></div>
+          </li>
+          <li id="mfr" data-from="2025" data-to="now">
+            <span class="when">2025–present</span><div><h4>Medical First Responder, St. John Ambulance</h4></div>
+          </li>
+          <li id="steadward" data-from="2024" data-to="now">
+            <span class="when">2024–present</span><div><h4>Volunteer, Steadward Centre for Personal and Physical Achievement</h4><p>Supported fitness and mobility programs for people with physical and neurological disabilities.</p></div>
+          </li>
+        </ul>
 
-    <h3 class="group">Selected training</h3>
-    <ul class="certs">
-      <li>Basic Life Support — Heart and Stroke Foundation, 2024</li>
-      <li>Medical First Responder — St. John Ambulance, 2024</li>
-      <li>WHMIS — University of Alberta, 2025</li>
-      <li>Laboratory Chemical Safety, Biological Safety, and Laboratory Hazard Assessment and Control — University of Alberta EHS, 2024</li>
-    </ul>
+        <h3 class="group">Skills</h3>
+        <ul class="stack skills">
+          <li>Python</li><li>C</li><li>MATLAB</li><li>Full-stack development</li><li>API integration</li><li>Microcontrollers</li><li>Machine learning</li><li>Deep learning</li><li>Git</li><li>Azure DevOps</li>
+        </ul>
+
+        <h3 class="group">Selected training</h3>
+        <ul class="certs">
+          <li>Basic Life Support — Heart and Stroke Foundation, 2024</li>
+          <li>Medical First Responder — St. John Ambulance, 2024</li>
+          <li>WHMIS — University of Alberta, 2025</li>
+          <li>Laboratory Chemical Safety, Biological Safety, and Laboratory Hazard Assessment and Control — University of Alberta EHS, 2024</li>
+        </ul>
+      </div>
+    </div>
   </section>
 
   <section id="books" class="block">
@@ -396,5 +491,8 @@
 <script src="cursor.js" defer></script>
 <script src="egg.js?v=20261115b" defer></script>
 <script src="mobile-panels.js?v=20261114-return" defer></script>
+<script src="assets/github-activity.js" defer></script>
+<script src="work.js?v=20261119" defer></script>
+<script src="resume.js?v=20261119" defer></script>
 </body>
 </html>

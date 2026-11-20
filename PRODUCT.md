@@ -81,3 +81,11 @@ Trial approved by the user: the plain photograph is no longer drawn under the ch
 - A cell gets characters if the brightest thing inside it (not its average) rises above that photograph's own sky level. Each photograph is exposed for itself (`floor`, `ceil` in `field.js`), so faint images such as the Ultra Deep Field use the full range of symbols. Each cell also carries the colour of its brightest object, so a symbol over a small galaxy is not left dark.
 - Two shell variants in `space-motion.js` take their shape from the photograph instead of a hand-placed ellipse. `traced` (Crab Nebula): fronts expand in the object's measured outline. `glow` (Orion Nebula): fronts start at the light source and bend around the cloud's bright and dark regions. The user reported the plain elliptical rings as looking off on both; other shell photographs still use ellipses and may need the same.
 
+
+### Work and Resume — 19 November 2026
+
+The user found Work and Resume boring and pointed to samworks.vercel.app as the model: project pictures, links, and a themed GitHub activity graph at the end.
+
+- Work is a two-column grid of projects, each led by a picture. Real screenshots where the work is public (SimuPrep, Basirah, the Evidence Poverty Auditor dashboard, the Vibe-Maxxing Devpost image; provenance in `assets/SOURCES.md`). The other four covers are drawn in the artwork's characters by `work.js`, each a picture of what the project measures, labelled "Illustration", still until hovered. Honours are set in the spike colour with a four-point star; tech tags only where a repo or Devpost confirms them.
+- GitHub activity is a year of stars: brightness by contributions, diffraction spikes on the busiest days. A saved snapshot (`assets/github-activity.js`, refreshed with `node scripts/update-github-activity.mjs`) draws first; when a visitor reaches the graph the page asks github-contributions-api.jogruber.de for fresher counts and keeps the snapshot if that fails. This is the site's only runtime network request, approved by the user.
+- Resume draws its own timeline from `data-from` / `data-to` on each entry (`resume.js`), one coloured track per group in the Hubble narrowband palette. On wide screens the chart is sticky beside the list and lights the entry being read.
