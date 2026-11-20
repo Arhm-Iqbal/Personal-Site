@@ -50,10 +50,6 @@
     }).sort((a, b) => a.ink - b.ink).map(g => g.char);
   }
 
-  // Joint angles over one stride, from heel strike to heel strike, scaled to about -1..1.
-  const hip = p => Math.cos(TAU * (p - .88));
-  const knee = p => (4 + 14 * bump(p, .14, .055) + 56 * bump(p, .72, .1) - 30) / 30;
-  const ankle = p => (-6 * bump(p, .06, .035) + 11 * bump(p, .43, .12) - 21 * bump(p, .63, .055) + 2) / 15;
   // A programmed temperature cycle: hold cool, ramp, hold warm, back again.
   const program = p => {
     p = fract(p);
@@ -85,26 +81,6 @@
         const floor = .06 * gain * noise(x * 4 + 40, v * c.rows);
         o.i = Math.min(1, breath * 1.05 + burst + floor);
         o.h = 174 + 16 * moved; o.s = .72;
-      }
-    },
-    // Hip, knee and ankle traced over strides, the way the two phones report them.
-    gait: {
-      still: 1.4,
-      labels: [['hip', .2], ['knee', .52], ['ankle', .82]],
-      field(u, v, t, o, c) {
-        const stride = u * 2.4 + t * .3, du = .5 / c.cols * 2.4;
-        const bands = [[.2, hip, 248], [.52, knee, 268], [.82, ankle, 292]];
-        let best = 0, hue = 268;
-        for (const [centre, angle, h] of bands) {
-          const d = rowsFrom(s => centre - .1 * angle(fract(s)), stride, v, du, c.rows);
-          const line = Math.exp(-(d * d) / (2 * .42 * .42));
-          const base = Math.abs(v - centre) * c.rows < .5 && (Math.floor(u * c.cols) % 3) === 0 ? .1 : 0;
-          const n = Math.max(line, base);
-          if (n > best) { best = n; hue = h; }
-        }
-        const heel = bump(stride, 0, .005) * .14;
-        o.i = Math.max(best, heel, hash(Math.floor(u * c.cols), Math.floor(v * c.rows)) < .012 ? .08 : 0);
-        o.h = hue; o.s = .58;
       }
     },
     // Lines of form text; one route crosses them and lights each step it reaches.
@@ -216,16 +192,6 @@
     for (const { colour, cells } of buckets.values()) {
       g.fillStyle = colour;
       for (let k = 0; k < cells.length; k += 3) g.fillText(cells[k], cells[k + 1], cells[k + 2]);
-    }
-    if (spec.labels) {
-      g.textAlign = 'left';
-      for (const [text, v] of spec.labels) {
-        const y = (Math.floor(v * rows) + .5) * ch, x = cw * 1.5, w = g.measureText(text).width;
-        g.fillStyle = `rgb(${GROUND.join(' ')})`;
-        g.fillRect(x - cw * .6, y - ch * .5, w + cw * 1.2, ch);
-        g.fillStyle = 'rgb(240 238 232 / .72)';
-        g.fillText(text, x, y);
-      }
     }
   }
 

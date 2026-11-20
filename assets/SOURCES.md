@@ -265,12 +265,13 @@ Webb images from ESA/Webb and EHT images from ESO, both CC BY 4.0. The accretion
 
 # Project covers (Work)
 
-Captured 19 November 2026 from Arhm's own public work. The four projects with no
-public picture (Wi-Fi Biosensing, phone-based motion tracking, GrantPath, the
-Drosophila rig) have no raster: `work.js` draws their covers in characters at
-runtime, and each is labelled on the page as an illustration.
+Captured 19 November 2026 from Arhm's own public work. The three projects with no
+public picture (Wi-Fi Biosensing, GrantPath, the Drosophila rig) have no raster:
+`work.js` draws their covers in characters at runtime, and each is labelled on
+the page as an illustration.
 
 - `work/simuprep.jpg`: screenshot of https://simuprep-product.vercel.app at 1440×900, scaled to 1280×800.
+- `work/im-you.jpg`: screenshot of https://im-u.vercel.app at 880×550 (2x), scaled to 1280×800.
 - `work/basirah.jpg`: screenshot of https://basirah-hazel.vercel.app at 1440×900, scaled to 1280×800.
 - `work/evidence-poverty-auditor.jpg`: crop of `05_figures/dashboard_final_geographic.png` from https://github.com/Arhm-Iqbal/evidence-poverty-auditor.
 - `work/vibe-maxxing.jpg`: crop of the first gallery image on https://devpost.com/software/vibe-maxxing, scaled to 1280×800.
